@@ -224,6 +224,7 @@ export default class VictoryLabel extends React.Component {
         dy={dy}
         dx={dx}
         textAnchor={textAnchor}
+        vectorEffect="non-scaling-stroke"
         transform={transform}
         style={style}
         {...this.props.events}
