@@ -5,7 +5,7 @@ import merge from "lodash/merge";
 const defaultStyles = {
   stroke: "transparent",
   fill: "#756f6a",
-  fontSize: 16,
+  fontSize: 19,
   fontFamily: "Helvetica",
   backgroundColor: "#ccc"
 };
