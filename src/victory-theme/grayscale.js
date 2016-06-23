@@ -33,6 +33,18 @@ export default {
       }),
     parent: {}
   },
+  candlestick: {
+    props: Object.assign({}, baseProps,
+      {candleColors: {positive: "#252525", negative: "#d9d9d9"}}),
+    data: {
+      fill: "grayscaleBlack",
+      opacity: 1,
+      stroke: "transparent",
+      strokeWidth: 1
+    },
+    labels: baseLabelStyles,
+    parent: {}
+  },
   bar: {
     data: {
       width: 8,
