@@ -4,7 +4,6 @@ import d3Interpolate from "d3-interpolate";
 import { timer } from "d3-timer";
 import { addVictoryInterpolator } from "./util";
 
-
 addVictoryInterpolator();
 
 export default class VictoryAnimation extends React.Component {

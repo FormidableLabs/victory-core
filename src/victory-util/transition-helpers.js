@@ -1,4 +1,7 @@
 /* eslint-disable func-style */
+import React from "react";
+import { isFunction } from "lodash";
+
 export function getDatumKey(datum, idx) {
   return (datum.key || idx).toString();
 }
@@ -58,4 +61,27 @@ export function getChildTransitionDuration(child, type) {
   const defaultTransitions = child.type && child.type.defaultTransitions;
   return animate[type] && animate[type].duration ||
     defaultTransitions[type] && defaultTransitions[type].duration;
+}
+
+export function getDomainFromChildren(props, axis) {
+  const getChildDomains = (children) => {
+    return children.reduce((memo, child) => {
+      if (child.type && isFunction(child.type.getDomain)) {
+        const childDomain = child.props && child.type.getDomain(child.props, axis);
+        return childDomain ? memo.concat(childDomain) : memo;
+      } else if (child.props && child.props.children) {
+        return memo.concat(getChildDomains(React.Children.toArray(child.props.children)));
+      }
+      return memo;
+    }, []);
+  };
+
+  const childComponents = React.Children.toArray(props.children);
+  if (props.domain && (Array.isArray(props.domain) || props.domain[axis])) {
+    return Array.isArray(props.domain) ? props.domain : props.domain[axis];
+  } else {
+    const childDomains = getChildDomains(childComponents);
+    return childDomains.length === 0 ?
+      [0, 1] : [Math.min(...childDomains), Math.max(...childDomains)];
+  }
 }
