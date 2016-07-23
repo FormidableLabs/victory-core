@@ -60,10 +60,11 @@ export function getInitialTransitionState(oldChildren, nextChildren) {
     React.Children.toArray(oldChildren),
     React.Children.toArray(nextChildren)
   );
+
   return {
-    nodesWillEnter,
-    nodesWillExit,
     childrenTransitions,
+    nodesWillExit,
+    nodesWillEnter,
     // TODO: This may need to be refactored for the following situation.
     //       The component receives new props, and the data provided
     //       is a perfect match for the previous data and domain except

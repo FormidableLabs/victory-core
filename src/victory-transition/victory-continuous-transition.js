@@ -68,8 +68,7 @@ export default class VictoryContinuousTransition extends React.Component {
     const child = React.Children.toArray(props.children)[0];
 
     if (whitelist.indexOf(child.type.displayName) === -1) {
-      // eslint-disable-next-line no-console, max-len, no-undef
-      console.warn("Component VictoryContinuousTransition should work with continuous charts, for discrete charts use VictoryTransition instead!");
+      console.warn("Component VictoryContinuousTransition should work with continuous charts, for discrete charts use VictoryTransition instead!");       // eslint-disable-line no-console, max-len, no-undef
     }
 
     const transitionProps = getTransitionProps(child);

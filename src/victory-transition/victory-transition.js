@@ -63,13 +63,11 @@ export default class VictoryTransition extends React.Component {
       );
 
     // whitelist using continuous-transition, otherwise give warning.
-    // eslint-disable-next-line max-len
-    const whitelist = ["VictoryBar", "VictoryAxis", "VictoryCandlestick", "VictoryErrorBar", "VictoryScatter"];
+    const whitelist = ["VictoryBar", "VictoryAxis", "VictoryCandlestick", "VictoryErrorBar", "VictoryScatter"];     // eslint-disable-line max-len
     const child = React.Children.toArray(props.children)[0];
 
     if (whitelist.indexOf(child.type.displayName) === -1) {
-      // eslint-disable-next-line no-console, max-len, no-undef
-      console.warn("Component VictoryTransition should work with discrete charts, for continuous charts use VictoryContinuousTransition instead!");
+      console.warn("Component VictoryTransition should work with discrete charts, for continuous charts use VictoryContinuousTransition instead!"); // eslint-disable-line no-console, max-len, no-undef
     }
 
     const transitionProps = getTransitionProps(child);
