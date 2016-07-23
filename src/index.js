@@ -5,11 +5,14 @@ export { default as Style } from "./victory-util/style";
 export { default as PropTypes } from "./victory-util/prop-types";
 export { default as Events } from "./victory-util/events";
 import * as Transitions from "./victory-util/transitions";
-export { Transitions };
+import * as ContinuousTransitions from "./victory-util/continuous-transitions";
+export { Transitions, ContinuousTransitions };
 
 export { default as VictoryAnimation } from "./victory-animation/victory-animation";
 export { default as VictoryLabel } from "./victory-label/victory-label";
 export { default as VictoryTransition } from "./victory-transition/victory-transition";
+// eslint-disable-next-line max-len
+export { default as VictoryContinuousTransition } from "./victory-transition/victory-continuous-transition";
 export { default as VictorySharedEvents } from "./victory-shared-events/victory-shared-events";
 export { default as VictoryContainer } from "./victory-container/victory-container";
 export { default as VictoryTheme } from "./victory-theme/victory-theme";

@@ -1,9 +1,9 @@
 import React from "react";
 import VictoryAnimation from "../victory-animation/victory-animation";
-import { Transitions } from "../victory-util/index";
+import { ContinuousTransitions } from "../victory-util/index";
 import { defaults, isFunction, pick } from "lodash";
 
-export default class VictoryTransition extends React.Component {
+export default class VictoryContinuousTransition extends React.Component {
   static propTypes = {
     /**
      * The animate prop specifies an animation config for the transition.
@@ -11,7 +11,7 @@ export default class VictoryTransition extends React.Component {
      */
     animate: React.PropTypes.object,
     /**
-     * VictoryTransition animates a single child component
+     * VictoryContinuousTransitions animates a single child component
      */
     children: React.PropTypes.node,
     /**
@@ -30,7 +30,9 @@ export default class VictoryTransition extends React.Component {
     if (!animate) {
       return {};
     } else if (animate.parentState) {
-      const oldProps = animate.parentState.nodesWillExit ? props : null;
+      const oldProps = animate.parentState.nodesWillEnter
+        || animate.parentState.nodesWillExit
+        ? props : null;
       return {oldProps};
     } else {
       const oldChildren = React.Children.toArray(props.children);
@@ -39,14 +41,14 @@ export default class VictoryTransition extends React.Component {
         nodesWillExit,
         nodesWillEnter,
         childrenTransitions,
-        nodesShouldEnter
-      } = Transitions.getInitialTransitionState(oldChildren, nextChildren);
+        nodesShouldExit
+      } = ContinuousTransitions.getInitialTransitionState(oldChildren, nextChildren);
       return {
         nodesWillExit,
         nodesWillEnter,
         childrenTransitions,
-        nodesShouldEnter,
-        oldProps: nodesWillExit ? props : null
+        nodesShouldExit,
+        oldProps: nodesWillEnter || nodesWillExit ? props : null
       };
     }
   }
@@ -75,11 +77,11 @@ export default class VictoryTransition extends React.Component {
   }
 
   render() {
-    const props = this.state && this.state.nodesWillExit ?
+    const props = this.state && (this.state.nodesWillEnter || this.state.nodesWillExit) ?
       this.state.oldProps : this.props;
     const getTransitionProps = this.props.animate && this.props.animate.getTransitions ?
       this.props.animate.getTransitions :
-      Transitions.getTransitionPropsFactory(
+      ContinuousTransitions.getTransitionPropsFactory(
         props,
         this.state,
         (newState) => this.setState(newState)
@@ -87,7 +89,9 @@ export default class VictoryTransition extends React.Component {
     const child = React.Children.toArray(props.children)[0];
     const transitionProps = getTransitionProps(child);
     const domain = {
-      x: this.getDomainFromChildren(props, "x"),
+      x: this.state && this.state.nodesWillExit
+        ? this.getDomainFromChildren(this.props, "x")
+        : this.getDomainFromChildren(props, "x"),
       y: this.getDomainFromChildren(props, "y")
     };
     const combinedProps = defaults(
