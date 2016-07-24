@@ -4,9 +4,10 @@ export { default as Log } from "./victory-util/log";
 export { default as Style } from "./victory-util/style";
 export { default as PropTypes } from "./victory-util/prop-types";
 export { default as Events } from "./victory-util/events";
+import * as TransitionHelpers from "./victory-util/transition-helpers";
 import * as Transitions from "./victory-util/transitions";
 import * as ContinuousTransitions from "./victory-util/continuous-transitions";
-export { Transitions, ContinuousTransitions };
+export { TransitionHelpers, Transitions, ContinuousTransitions };
 
 export { default as VictoryAnimation } from "./victory-animation/victory-animation";
 export { default as VictoryLabel } from "./victory-label/victory-label";

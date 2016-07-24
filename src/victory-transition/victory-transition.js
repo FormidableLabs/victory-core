@@ -6,8 +6,8 @@ import { defaults, pick } from "lodash";
 export default class VictoryTransition extends React.Component {
   constructor(props) {
     super(props);
-    this.checkChartType = this.checkChartType.bind(this);
-    this.checkChartType(props);
+    const child = React.Children.toArray(props.children)[0];
+    this.continuous = TransitionHelpers.checkContinuousChartType(child);
   }
 
   static propTypes = {
@@ -27,19 +27,9 @@ export default class VictoryTransition extends React.Component {
     animationWhitelist: React.PropTypes.array
   };
 
-  checkChartType(props) {
-    const whitelistContinuous = ["line", "area"];
-    const child = React.Children.toArray(props.children)[0];
-
-    if (whitelistContinuous.indexOf(child.type.role) === -1) {
-      this.continuous = false;
-    } else {
-      this.continuous = true;
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
-    this.checkChartType(nextProps);
+    const child = React.Children.toArray(nextProps.children)[0];
+    this.continuous = TransitionHelpers.checkContinuousChartType(child);
     if (this.continuous) {
       this.setState(this.getContinuousTransitionState(this.props, nextProps));
     } else {
@@ -62,7 +52,7 @@ export default class VictoryTransition extends React.Component {
         nodesWillEnter,
         childrenTransitions,
         nodesShouldEnter
-      } = Transitions.getInitialTransitionState(oldChildren, nextChildren);
+      } = TransitionHelpers.getInitialTransitionState(oldChildren, nextChildren);
       return {
         nodesWillExit,
         nodesWillEnter,
@@ -77,11 +67,6 @@ export default class VictoryTransition extends React.Component {
     const { animate } = props;
     if (!animate) {
       return {};
-    } else if (animate.parentState) {
-      const oldProps = animate.parentState.nodesWillEnter
-        || animate.parentState.nodesWillExit
-        ? props : null;
-      return {oldProps};
     } else {
       const oldChildren = React.Children.toArray(props.children);
       const nextChildren = React.Children.toArray(nextProps.children);
@@ -90,7 +75,7 @@ export default class VictoryTransition extends React.Component {
         nodesWillEnter,
         childrenTransitions,
         nodesShouldExit
-      } = ContinuousTransitions.getInitialTransitionState(oldChildren, nextChildren);
+      } = TransitionHelpers.getInitialTransitionState(oldChildren, nextChildren);
       return {
         nodesWillExit,
         nodesWillEnter,
@@ -117,6 +102,11 @@ export default class VictoryTransition extends React.Component {
         this.state,
         (newState) => this.setState(newState)
       );
+
+      console.log('isContinuous')
+      console.log(this.state && this.state.nodesWillExit
+          ? TransitionHelpers.getDomainFromChildren(this.props, "x")
+          : TransitionHelpers.getDomainFromChildren(props, "x"))
 
       domain = {
         x: this.state && this.state.nodesWillExit

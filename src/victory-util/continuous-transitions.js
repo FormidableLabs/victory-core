@@ -1,78 +1,10 @@
 /* eslint-disable func-style */
 import { assign, defaults, identity, filter } from "lodash";
-import React from "react";
 import {
   getDatumKey,
-  getNodeTransitions,
   getChildData,
   getChildTransitionDuration
 } from "./transition-helpers";
-
-/**
- * If a parent component has animation enabled, calculate the transitions
- * for any data of any child component that supports data transitions
- * Data transitions are defined as any two datasets where data nodes exist
- * in the first set and not the second, in the second and not the first,
- * or both.
- *
- * @param  {Children}  oldChildren   this.props.children from old props
- * @param  {Children}  nextChildren  this.props.children from next props
- *
- * @return {Object}                  Object with the following properties:
- *                                    - nodesWillEnter
- *                                    - nodesWillExit
- *                                    - childrenTransitions
- *                                    - nodesShouldExit
- */
-
-export function getInitialTransitionState(oldChildren, nextChildren) {
-  let nodesWillExit = false;
-  let nodesWillEnter = false;
-
-  const getTransition = (oldChild, newChild) => {
-    if (!newChild || oldChild.type !== newChild.type) {
-      return {};
-    }
-
-    const { exiting, entering } =
-      getNodeTransitions(getChildData(oldChild), getChildData(newChild)) || {};
-
-    nodesWillEnter = nodesWillEnter || !!entering;
-    nodesWillExit = nodesWillExit || !!exiting;
-
-    return { entering: entering || false, exiting: exiting || false };
-  };
-
-  const getTransitionsFromChildren = (old, next) => {
-    return old.map((child, idx) => {
-      if (child.props.children) {
-        return getTransitionsFromChildren(
-          React.Children.toArray(old[idx].props.children),
-          React.Children.toArray(next[idx].props.children)
-        );
-      }
-      // get Transition exiting and enter nodes
-      return getTransition(child, next[idx]);
-    });
-  };
-
-  const childrenTransitions = getTransitionsFromChildren(
-    React.Children.toArray(oldChildren),
-    React.Children.toArray(nextChildren)
-  );
-
-  return {
-    childrenTransitions,
-    nodesWillExit,
-    nodesWillEnter,
-    // TODO: This may need to be refactored for the following situation.
-    //       The component receives new props, and the data provided
-    //       is a perfect match for the previous data and domain except
-    //       for new nodes. In this case, we wouldn't want a delay before
-    //       the new nodes appear.
-    nodesShouldExit: false
-  };
-}
 
 function getInitialChildProps(animate, data) {
   const after = animate.onExit && animate.onExit.after ? animate.onExit.after : identity;
