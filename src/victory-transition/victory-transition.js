@@ -103,11 +103,6 @@ export default class VictoryTransition extends React.Component {
         (newState) => this.setState(newState)
       );
 
-      console.log('isContinuous')
-      console.log(this.state && this.state.nodesWillExit
-          ? TransitionHelpers.getDomainFromChildren(this.props, "x")
-          : TransitionHelpers.getDomainFromChildren(props, "x"))
-
       domain = {
         x: this.state && this.state.nodesWillExit
           ? TransitionHelpers.getDomainFromChildren(this.props, "x")
