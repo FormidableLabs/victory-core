@@ -11,7 +11,6 @@ export { Transitions, ContinuousTransitions };
 export { default as VictoryAnimation } from "./victory-animation/victory-animation";
 export { default as VictoryLabel } from "./victory-label/victory-label";
 export { default as VictoryTransition } from "./victory-transition/victory-transition";
-export { default as VictoryContinuousTransition } from "./victory-transition/victory-continuous-transition"; // eslint-disable-line max-len
 export { default as VictorySharedEvents } from "./victory-shared-events/victory-shared-events";
 export { default as VictoryContainer } from "./victory-container/victory-container";
 export { default as VictoryTheme } from "./victory-theme/victory-theme";

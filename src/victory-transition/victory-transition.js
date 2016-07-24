@@ -1,9 +1,15 @@
 import React from "react";
 import VictoryAnimation from "../victory-animation/victory-animation";
-import { Transitions, TransitionHelpers } from "../victory-util/index";
+import { ContinuousTransitions, Transitions, TransitionHelpers } from "../victory-util/index";
 import { defaults, pick } from "lodash";
 
 export default class VictoryTransition extends React.Component {
+  constructor(props) {
+    super(props);
+    this.checkChartType = this.checkChartType.bind(this);
+    this.checkChartType(props);
+  }
+
   static propTypes = {
     /**
      * The animate prop specifies an animation config for the transition.
@@ -21,8 +27,24 @@ export default class VictoryTransition extends React.Component {
     animationWhitelist: React.PropTypes.array
   };
 
+  checkChartType(props) {
+    const whitelistContinuous = ["line", "area"];
+    const child = React.Children.toArray(props.children)[0];
+
+    if (whitelistContinuous.indexOf(child.type.role) === -1) {
+      this.continuous = false;
+    } else {
+      this.continuous = true;
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
-    this.setState(this.getTransitionState(this.props, nextProps));
+    this.checkChartType(nextProps);
+    if (this.continuous) {
+      this.setState(this.getContinuousTransitionState(this.props, nextProps));
+    } else {
+      this.setState(this.getTransitionState(this.props, nextProps));
+    }
   }
 
   getTransitionState(props, nextProps) {
@@ -51,10 +73,62 @@ export default class VictoryTransition extends React.Component {
     }
   }
 
+  getContinuousTransitionState(props, nextProps) {
+    const { animate } = props;
+    if (!animate) {
+      return {};
+    } else if (animate.parentState) {
+      const oldProps = animate.parentState.nodesWillEnter
+        || animate.parentState.nodesWillExit
+        ? props : null;
+      return {oldProps};
+    } else {
+      const oldChildren = React.Children.toArray(props.children);
+      const nextChildren = React.Children.toArray(nextProps.children);
+      const {
+        nodesWillExit,
+        nodesWillEnter,
+        childrenTransitions,
+        nodesShouldExit
+      } = ContinuousTransitions.getInitialTransitionState(oldChildren, nextChildren);
+      return {
+        nodesWillExit,
+        nodesWillEnter,
+        childrenTransitions,
+        nodesShouldExit,
+        oldProps: nodesWillEnter || nodesWillExit ? props : null
+      };
+    }
+  }
+
   render() {
-    const props = this.state && this.state.nodesWillExit ?
+    let props;
+    let getTransitionProps;
+    let domain;
+
+    if (this.continuous) {
+      props = this.state && (this.state.nodesWillEnter || this.state.nodesWillExit) ?
       this.state.oldProps : this.props;
-    const getTransitionProps = this.props.animate && this.props.animate.getTransitions ?
+
+      getTransitionProps = this.props.animate && this.props.animate.getTransitions ?
+      this.props.animate.getTransitions :
+      ContinuousTransitions.getTransitionPropsFactory(
+        props,
+        this.state,
+        (newState) => this.setState(newState)
+      );
+
+      domain = {
+        x: this.state && this.state.nodesWillExit
+          ? TransitionHelpers.getDomainFromChildren(this.props, "x")
+          : TransitionHelpers.getDomainFromChildren(props, "x"),
+        y: TransitionHelpers.getDomainFromChildren(props, "y")
+      };
+    } else {
+      props = this.state && this.state.nodesWillExit ?
+      this.state.oldProps : this.props;
+
+      getTransitionProps = this.props.animate && this.props.animate.getTransitions ?
       this.props.animate.getTransitions :
       Transitions.getTransitionPropsFactory(
         props,
@@ -62,22 +136,18 @@ export default class VictoryTransition extends React.Component {
         (newState) => this.setState(newState)
       );
 
-    // whitelist using continuous-transition, otherwise give warning.
-    const whitelist = ["VictoryBar", "VictoryAxis", "VictoryCandlestick", "VictoryErrorBar", "VictoryScatter"];     // eslint-disable-line max-len
-    const child = React.Children.toArray(props.children)[0];
-
-    if (whitelist.indexOf(child.type.displayName) === -1) {
-      console.warn("Component VictoryTransition should work with discrete charts, for continuous charts use VictoryContinuousTransition instead!"); // eslint-disable-line no-console, max-len, no-undef
+      domain = {
+        x: TransitionHelpers.getDomainFromChildren(props, "x"),
+        y: TransitionHelpers.getDomainFromChildren(props, "y")
+      };
     }
 
+    const child = React.Children.toArray(props.children)[0];
     const transitionProps = getTransitionProps(child);
-    const domain = {
-      x: TransitionHelpers.getDomainFromChildren(props, "x"),
-      y: TransitionHelpers.getDomainFromChildren(props, "y")
-    };
     const combinedProps = defaults(
       {domain}, transitionProps, child.props
     );
+
     const propsToAnimate = props.animationWhitelist ?
       pick(combinedProps, props.animationWhitelist) : combinedProps;
     return (
