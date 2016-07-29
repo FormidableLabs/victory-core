@@ -1,9 +1,15 @@
 import React from "react";
 import VictoryAnimation from "../victory-animation/victory-animation";
-import { Transitions } from "../victory-util/index";
-import { defaults, isFunction, pick } from "lodash";
+import { ContinuousTransitions, Transitions, TransitionHelpers } from "../victory-util/index";
+import { defaults, pick } from "lodash";
 
 export default class VictoryTransition extends React.Component {
+  constructor(props) {
+    super(props);
+    const child = React.Children.toArray(props.children)[0];
+    this.continuous = TransitionHelpers.checkContinuousChartType(child);
+  }
+
   static propTypes = {
     /**
      * The animate prop specifies an animation config for the transition.
@@ -22,7 +28,13 @@ export default class VictoryTransition extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setState(this.getTransitionState(this.props, nextProps));
+    const child = React.Children.toArray(nextProps.children)[0];
+    this.continuous = TransitionHelpers.checkContinuousChartType(child);
+    if (this.continuous) {
+      this.setState(this.getContinuousTransitionState(this.props, nextProps));
+    } else {
+      this.setState(this.getTransitionState(this.props, nextProps));
+    }
   }
 
   getTransitionState(props, nextProps) {
@@ -40,7 +52,7 @@ export default class VictoryTransition extends React.Component {
         nodesWillEnter,
         childrenTransitions,
         nodesShouldEnter
-      } = Transitions.getInitialTransitionState(oldChildren, nextChildren);
+      } = TransitionHelpers.getInitialTransitionState(oldChildren, nextChildren);
       return {
         nodesWillExit,
         nodesWillEnter,
@@ -51,48 +63,76 @@ export default class VictoryTransition extends React.Component {
     }
   }
 
-  getDomainFromChildren(props, axis) {
-    const getChildDomains = (children) => {
-      return children.reduce((memo, child) => {
-        if (child.type && isFunction(child.type.getDomain)) {
-          const childDomain = child.props && child.type.getDomain(child.props, axis);
-          return childDomain ? memo.concat(childDomain) : memo;
-        } else if (child.props && child.props.children) {
-          return memo.concat(getChildDomains(React.Children.toArray(child.props.children)));
-        }
-        return memo;
-      }, []);
-    };
-
-    const childComponents = React.Children.toArray(props.children);
-    if (props.domain && (Array.isArray(props.domain) || props.domain[axis])) {
-      return Array.isArray(props.domain) ? props.domain : props.domain[axis];
+  getContinuousTransitionState(props, nextProps) {
+    const { animate } = props;
+    if (!animate) {
+      return {};
     } else {
-      const childDomains = getChildDomains(childComponents);
-      return childDomains.length === 0 ?
-        [0, 1] : [Math.min(...childDomains), Math.max(...childDomains)];
+      const oldChildren = React.Children.toArray(props.children);
+      const nextChildren = React.Children.toArray(nextProps.children);
+      const {
+        nodesWillExit,
+        nodesWillEnter,
+        childrenTransitions,
+        nodesShouldExit
+      } = TransitionHelpers.getInitialTransitionState(oldChildren, nextChildren);
+      return {
+        nodesWillExit,
+        nodesWillEnter,
+        childrenTransitions,
+        nodesShouldExit,
+        oldProps: nodesWillEnter || nodesWillExit ? props : null
+      };
     }
   }
 
   render() {
-    const props = this.state && this.state.nodesWillExit ?
+    let props;
+    let getTransitionProps;
+    let domain;
+
+    if (this.continuous) {
+      props = this.state && (this.state.nodesWillEnter || this.state.nodesWillExit) ?
       this.state.oldProps : this.props;
-    const getTransitionProps = this.props.animate && this.props.animate.getTransitions ?
+
+      getTransitionProps = this.props.animate && this.props.animate.getTransitions ?
+      this.props.animate.getTransitions :
+      ContinuousTransitions.getTransitionPropsFactory(
+        props,
+        this.state,
+        (newState) => this.setState(newState)
+      );
+
+      domain = {
+        x: this.state && this.state.nodesWillExit
+          ? TransitionHelpers.getDomainFromChildren(this.props, "x")
+          : TransitionHelpers.getDomainFromChildren(props, "x"),
+        y: TransitionHelpers.getDomainFromChildren(props, "y")
+      };
+    } else {
+      props = this.state && this.state.nodesWillExit ?
+      this.state.oldProps : this.props;
+
+      getTransitionProps = this.props.animate && this.props.animate.getTransitions ?
       this.props.animate.getTransitions :
       Transitions.getTransitionPropsFactory(
         props,
         this.state,
         (newState) => this.setState(newState)
       );
+
+      domain = {
+        x: TransitionHelpers.getDomainFromChildren(props, "x"),
+        y: TransitionHelpers.getDomainFromChildren(props, "y")
+      };
+    }
+
     const child = React.Children.toArray(props.children)[0];
     const transitionProps = getTransitionProps(child);
-    const domain = {
-      x: this.getDomainFromChildren(props, "x"),
-      y: this.getDomainFromChildren(props, "y")
-    };
     const combinedProps = defaults(
       {domain}, transitionProps, child.props
     );
+
     const propsToAnimate = props.animationWhitelist ?
       pick(combinedProps, props.animationWhitelist) : combinedProps;
     return (
