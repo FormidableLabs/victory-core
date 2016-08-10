@@ -152,25 +152,19 @@ export default {
     parent: {}
   },
   pie: {
-    props: assign({}, baseProps,
+    data: {
+      padding,
+      stroke: blueGrey50,
+      strokeWidth: 1
+    },
+    labels: assign({}, baseLabelStyles,
       {
-        colorScale: colors
+        padding: 200,
+        stroke: "transparent",
+        strokeWidth: 0,
+        textAnchor: "middle"
       }),
-    style: {
-      data: {
-        padding,
-        stroke: blueGrey50,
-        strokeWidth: 1
-      },
-      labels: assign({}, baseLabelStyles,
-        {
-          padding: 200,
-          stroke: "transparent",
-          strokeWidth: 0,
-          textAnchor: "middle"
-        }),
-      parent: {}
-    }
+    parent: {}
   },
   scatter: {
     data: {
