@@ -141,10 +141,7 @@ export default {
   },
 
   modifyProps(props, fallbackProps, themeProps) {
-    const themeCheck = props.theme && props.theme.props;
-    const themePropsObject = themeCheck && !themeProps ? props.theme.props : themeProps;
-
-    return themeCheck ? defaults({}, props, themePropsObject, fallbackProps.props)
+    return themeProps ? defaults({}, props, themeProps, fallbackProps.props)
     : defaults({}, props, fallbackProps.props);
   },
 
