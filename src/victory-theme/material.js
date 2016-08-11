@@ -31,7 +31,7 @@ const fontSize = 12;
 // * Layout
 // *
 const padding = 8;
-const baseProps = {
+const props = {
   width: 350,
   height: 350,
   colorScale: colors
@@ -59,10 +59,9 @@ export default {
       data: {
         fill: grey900
       },
-      labels: baseLabelStyles,
-      parent: {}
+      labels: baseLabelStyles
     },
-    props: baseProps
+    props
   },
   axis: {
     style: {
@@ -100,7 +99,7 @@ export default {
           stroke: "transparent"
         })
     },
-    props: baseProps
+    props
   },
   bar: {
     style: {
@@ -112,20 +111,18 @@ export default {
         strokeWidth: 0,
         width: 5
       },
-      labels: baseLabelStyles,
-      parent: {}
+      labels: baseLabelStyles
     },
-    props: baseProps
+    props
   },
   candlestick: {
     style: {
       data: {
         stroke: blueGrey700
       },
-      labels: baseLabelStyles,
-      parent: {}
+      labels: baseLabelStyles
     },
-    props: assign({}, baseProps,
+    props: assign({}, props,
       {
         candleColors: {
           positive: "#ffffff",
@@ -146,10 +143,9 @@ export default {
           stroke: "transparent",
           strokeWidth: 0,
           textAnchor: "start"
-        }),
-      parent: {}
+        })
     },
-    props: baseProps
+    props
   },
   line: {
     style: {
@@ -164,10 +160,9 @@ export default {
           stroke: "transparent",
           strokeWidth: 0,
           textAnchor: "start"
-        }),
-      parent: {}
+        })
     },
-    props: baseProps
+    props
   },
   pie: {
     style: {
@@ -184,7 +179,7 @@ export default {
           textAnchor: "middle"
         })
     },
-    props: baseProps
+    props
   },
   scatter: {
     style: {
@@ -198,21 +193,20 @@ export default {
         {
           stroke: "transparent",
           textAnchor: "middle"
-        }),
-      parent: {}
+        })
     },
-    props: baseProps
+    props
   },
   chart: {
     style: {},
-    props: baseProps
+    props
   },
   stack: {
     style: {},
-    props: baseProps
+    props
   },
   group: {
     style: {},
-    props: baseProps
+    props
   }
 };
