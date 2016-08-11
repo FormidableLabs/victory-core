@@ -141,8 +141,17 @@ export default {
   },
 
   modifyProps(props, fallbackProps, themeProps) {
-    return themeProps ? defaults({}, props, themeProps, fallbackProps.props)
-    : defaults({}, props, fallbackProps.props);
+    return themeProps ?
+      defaults({}, props, {
+        clipWidth: props.width,
+        clipHeight: props.height
+      },
+      themeProps,
+      fallbackProps.props)
+    : defaults({}, props, {
+      clipWidth: props.width,
+      clipHeight: props.height
+    }, fallbackProps.props);
   },
 
   getEvents(events, namespace) {

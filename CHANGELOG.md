@@ -1,5 +1,15 @@
 VictoryCore Changelog
 =====================
+## 4.6.1 (2016-08-11)
+
+- Fixes a bug for clipPath animations with parentState
+
+## 4.6.0 (2016-08-10)
+
+- Adds `displayName` to components for debugging
+- Adds array support for `childName` properties on event objects (attachment and mutation)
+- Enhances `onExit` and `onExit` transitions with support for clipPath curtain effect
+
 ## 4.5.1 (2016-08-5)
 
 - Fix PropType warnings in React 15.3+
