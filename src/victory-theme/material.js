@@ -31,9 +31,10 @@ const fontSize = 12;
 // * Layout
 // *
 const padding = 8;
-const baseProps = {
+const props = {
   width: 350,
-  height: 350
+  height: 350,
+  colorScale: colors
 };
 // *
 // * Labels
@@ -54,66 +55,74 @@ const strokeLinejoin = "round";
 
 export default {
   area: {
-    data: {
-      fill: grey900
+    style: {
+      data: {
+        fill: grey900
+      },
+      labels: baseLabelStyles
     },
-    labels: baseLabelStyles,
-    parent: {}
+    props
   },
   axis: {
-    axis: {
-      fill: "none",
-      stroke: blueGrey300,
-      strokeWidth: 2,
-      strokeLinecap,
-      strokeLinejoin
-    },
-    axisLabel: assign({}, baseLabelStyles,
-      {
+    style: {
+      axis: {
+        fill: "none",
+        stroke: blueGrey300,
+        strokeWidth: 2,
+        strokeLinecap,
+        strokeLinejoin
+      },
+      axisLabel: assign({}, baseLabelStyles,
+        {
+          padding,
+          stroke: "transparent"
+        }),
+      grid: {
+        fill: "none",
+        stroke: blueGrey50,
+        strokeDasharray,
+        strokeLinecap,
+        strokeLinejoin
+      },
+      ticks: {
+        fill: "none",
         padding,
-        stroke: "transparent"
-      }),
-    grid: {
-      fill: "none",
-      stroke: blueGrey50,
-      strokeDasharray,
-      strokeLinecap,
-      strokeLinejoin
+        size: 5,
+        stroke: blueGrey300,
+        strokeWidth: 1,
+        strokeLinecap,
+        strokeLinejoin
+      },
+      tickLabels: assign({}, baseLabelStyles,
+        {
+          fill: blueGrey700,
+          stroke: "transparent"
+        })
     },
-    ticks: {
-      fill: "none",
-      padding,
-      size: 5,
-      stroke: blueGrey300,
-      strokeWidth: 1,
-      strokeLinecap,
-      strokeLinejoin
-    },
-    tickLabels: assign({}, baseLabelStyles,
-      {
-        fill: blueGrey700,
-        stroke: "transparent"
-      })
+    props
   },
   bar: {
-    data: {
-      fill: blueGrey700,
-      opacity: 1,
-      padding,
-      stroke: "transparent",
-      strokeWidth: 0,
-      width: 5
+    style: {
+      data: {
+        fill: blueGrey700,
+        opacity: 1,
+        padding,
+        stroke: "transparent",
+        strokeWidth: 0,
+        width: 5
+      },
+      labels: baseLabelStyles
     },
-    labels: baseLabelStyles,
-    parent: {}
+    props
   },
   candlestick: {
-    data: {
-      stroke: blueGrey700
+    style: {
+      data: {
+        stroke: blueGrey700
+      },
+      labels: baseLabelStyles
     },
-    labels: baseLabelStyles,
-    parent: {},
-    props: assign({}, baseProps,
+    props: assign({}, props,
       {
         candleColors: {
           positive: "#ffffff",
@@ -122,40 +131,40 @@ export default {
       })
   },
   errorbar: {
-    data: {
-      fill: "none",
-      opacity: 1,
-      stroke: blueGrey700,
-      strokeWidth: 2
+    style: {
+      data: {
+        fill: "none",
+        opacity: 1,
+        stroke: blueGrey700,
+        strokeWidth: 2
+      },
+      labels: assign({}, baseLabelStyles,
+        {
+          stroke: "transparent",
+          strokeWidth: 0,
+          textAnchor: "start"
+        })
     },
-    labels: assign({}, baseLabelStyles,
-      {
-        stroke: "transparent",
-        strokeWidth: 0,
-        textAnchor: "start"
-      }),
-    parent: {}
+    props
   },
   line: {
-    data: {
-      fill: "none",
-      opacity: 1,
-      stroke: blueGrey700,
-      strokeWidth: 2
+    style: {
+      data: {
+        fill: "none",
+        opacity: 1,
+        stroke: blueGrey700,
+        strokeWidth: 2
+      },
+      labels: assign({}, baseLabelStyles,
+        {
+          stroke: "transparent",
+          strokeWidth: 0,
+          textAnchor: "start"
+        })
     },
-    labels: assign({}, baseLabelStyles,
-      {
-        stroke: "transparent",
-        strokeWidth: 0,
-        textAnchor: "start"
-      }),
-    parent: {}
+    props
   },
   pie: {
-    props: assign({}, baseProps,
-      {
-        colorScale: colors
-      }),
     style: {
       data: {
         padding,
@@ -168,27 +177,36 @@ export default {
           stroke: "transparent",
           strokeWidth: 0,
           textAnchor: "middle"
-        }),
-      parent: {}
-    }
+        })
+    },
+    props
   },
   scatter: {
-    data: {
-      fill: blueGrey700,
-      opacity: 1,
-      stroke: "transparent",
-      strokeWidth: 0
-    },
-    labels: Object.assign({}, baseLabelStyles,
-      {
+    style: {
+      data: {
+        fill: blueGrey700,
+        opacity: 1,
         stroke: "transparent",
-        textAnchor: "middle"
-      }),
-    parent: {}
+        strokeWidth: 0
+      },
+      labels: Object.assign({}, baseLabelStyles,
+        {
+          stroke: "transparent",
+          textAnchor: "middle"
+        })
+    },
+    props
   },
-  props: Object.assign({}, baseProps,
-    {
-      colorScale: colors
-    }
-  )
+  chart: {
+    style: {},
+    props
+  },
+  stack: {
+    style: {},
+    props
+  },
+  group: {
+    style: {},
+    props
+  }
 };

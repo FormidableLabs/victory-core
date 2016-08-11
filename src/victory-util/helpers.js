@@ -141,15 +141,12 @@ export default {
   },
 
   modifyProps(props, fallbackProps, themeProps) {
-    const themeCheck = props.theme && props.theme.props;
-    const themePropsObject = themeCheck && !themeProps ? props.theme.props : themeProps;
-
-    return themeCheck ?
+    return themeProps ?
       defaults({}, props, {
         clipWidth: props.width,
         clipHeight: props.height
       },
-      themePropsObject,
+      themeProps,
       fallbackProps.props)
     : defaults({}, props, {
       clipWidth: props.width,
