@@ -1,5 +1,7 @@
 import React, { PropTypes } from "react";
-import { PropTypes as CustomPropTypes, Style, TextSize, Helpers } from "../victory-util/index";
+import {
+  PropTypes as CustomPropTypes, Style, TextSize, Helpers, addEvents
+} from "../victory-util/index";
 import { merge, isEmpty, defaults, sumBy, maxBy } from "lodash";
 import VictoryLabel from "../victory-label/victory-label";
 import VictoryContainer from "../victory-container/victory-container";
@@ -11,7 +13,7 @@ const defaultLegendData = [
   { name: "Series 2" }
 ];
 
-export default class VictoryLegend extends React.Component {
+class VictoryLegend extends React.Component {
   static displayName = "VictoryLegend";
 
   static role = "legend";
@@ -32,6 +34,11 @@ export default class VictoryLegend extends React.Component {
       })
     ),
     dataComponent: PropTypes.element,
+    events: PropTypes.arrayOf(PropTypes.shape({
+      target: PropTypes.oneOf(["data", "labels"]),
+      eventKey: PropTypes.oneOf(["all"]),
+      eventHandlers: PropTypes.object
+    })),
     groupComponent: PropTypes.element,
     gutter: PropTypes.number,
     height: PropTypes.oneOfType([
@@ -182,7 +189,7 @@ export default class VictoryLegend extends React.Component {
     };
 
     return defaults({},
-      dataComponent.props,
+      this.getComponentProps(dataComponent, "data", i),
       {
         key: `symbol-${i}`,
         style,
@@ -210,7 +217,7 @@ export default class VictoryLegend extends React.Component {
     };
 
     return defaults({},
-      labelComponent.props,
+      this.getComponentProps(labelComponent, "labels", i),
       {
         key: `label-${i}`,
         style,
@@ -268,3 +275,5 @@ export default class VictoryLegend extends React.Component {
     return props.standalone ? this.renderContainer(props, group) : group;
   }
 }
+
+export default addEvents(VictoryLegend);
