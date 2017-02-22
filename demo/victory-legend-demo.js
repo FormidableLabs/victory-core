@@ -79,7 +79,8 @@ const LegendDemo = () => (
           }
         }
       }
-    ]} />
+    ]}
+    />
   </div>
 );
 
