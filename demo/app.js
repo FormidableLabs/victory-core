@@ -21,7 +21,7 @@ const App = React.createClass({
         <ul>
           <li><Link to="/animation">Victory Animation Demo</Link></li>
           <li><Link to="/label">Victory Label Demo</Link></li>
-          <li><Link to="/legend">Victory Legend</Link></li>
+          <li><Link to="/legend">Victory Legend Demo</Link></li>
           <li><Link to="/tooltip">Victory Tooltip Demo</Link></li>
         </ul>
         {this.props.children}

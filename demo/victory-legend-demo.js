@@ -1,4 +1,5 @@
 import React from "react";
+import { merge } from "lodash";
 import { VictoryLegend } from "../src/index";
 
 const svgStyle = { border: "1px solid darkgray" };
@@ -52,6 +53,34 @@ const LegendDemo = () => (
         style={{ labels: { fill: "darkgray" } }}
       />
     </svg>
+    <VictoryLegend data={data} events={[
+      {
+        target: "data",
+        eventHandlers: {
+          onClick: () => {
+            return [{
+              mutation: (props) => {
+                return { style: merge({}, props.style, { fill: "orange" }) };
+              }
+            }];
+          }
+        }
+      },
+      {
+        target: "labels",
+        eventHandlers: {
+          onClick: () => {
+            return [{
+              target: "data",
+              mutation: (props) => {
+                return { style: merge({}, props.style, { fill: "green" }) };
+              }
+            }];
+          }
+        }
+      }
+    ]}
+    />
   </div>
 );
 
