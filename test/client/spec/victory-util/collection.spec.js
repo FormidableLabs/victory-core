@@ -152,26 +152,30 @@ describe("collections", () => {
     });
   });
 
-  describe("allSetsEqual", () => {
+  describe("isEqualBy", () => {
+    let firstObject;
+    let secondObject;
 
-    it("returns true when all sets are equal", () => {
-      const comparisons = [
-        [1, 1],
-        ["wow", "wow"],
-        [{ stuff: 43 }, { stuff: 43 }]
-      ];
+    beforeEach(() => {
+      firstObject = {
+        x: 2,
+        y: "wow",
+        z: { things: true }
+      };
 
-      expect(Collection.allSetsEqual(comparisons)).to.eql(true);
+      secondObject = {
+        x: 2,
+        y: "wow",
+        z: { things: false }
+      };
     });
 
-    it("returns false when not all sets are equal", () => {
-      const comparisons = [
-        [1, 1],
-        ["wow", "wow"],
-        [{ stuff: 1 }, { stuff: 43 }]
-      ];
+    it("returns true when objects are equal by all fields", () => {
+      expect(Collection.isEqualBy(firstObject, secondObject, ["x", "y"])).to.eql(true);
+    });
 
-      expect(Collection.allSetsEqual(comparisons)).to.eql(false);
+    it("returns false when not all listed fields are equal", () => {
+      expect(Collection.isEqualBy(firstObject, secondObject, ["x", "y", "z"])).to.eql(false);
     });
   });
 });

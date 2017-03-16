@@ -2,9 +2,9 @@ import React, { PropTypes } from "react";
 import {
   PropTypes as CustomPropTypes, Helpers, Collection
 } from "../victory-util";
-import { merge } from "lodash";
+import addComputedProps from "react-computed-props";
 
-export default class ClipPath extends React.Component {
+class ClipPath extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     clipId: PropTypes.number,
@@ -26,7 +26,12 @@ export default class ClipPath extends React.Component {
       })
     ]),
     translateX: PropTypes.number,
-    translateY: PropTypes.number
+    translateY: PropTypes.number,
+    // computed properties
+    x: PropTypes.number,
+    y: PropTypes.number,
+    width: PropTypes.number,
+    height: PropTypes.number
   };
 
   static defaultProps = {
@@ -34,39 +39,8 @@ export default class ClipPath extends React.Component {
     translateY: 0
   }
 
-  componentWillMount() {
-    merge(this, this.calculateAttributes(this.props));
-  }
-
   shouldComponentUpdate(nextProps) {
-    const calculatedAttributes = this.calculateAttributes(nextProps);
-    if (!Collection.allSetsEqual([
-      [this.props.clipId, nextProps.clipId],
-      [this.x, calculatedAttributes.x],
-      [this.y, calculatedAttributes.y],
-      [this.height, calculatedAttributes.height],
-      [this.width, calculatedAttributes.width]
-    ])) {
-      merge(this, calculatedAttributes);
-      return true;
-    }
-    return false;
-  }
-
-  calculateAttributes(props) {
-    const { clipWidth, clipHeight, translateX, translateY } = props;
-    const padding = Helpers.getPadding(props);
-    const clipPadding = Helpers.getPadding({ padding: props.clipPadding });
-
-    const totalPadding = (side) => {
-      return padding[side] - clipPadding[side];
-    };
-    return {
-      x: totalPadding("left") + translateX,
-      y: totalPadding("top") + translateY,
-      width: Math.max(clipWidth - totalPadding("left") - totalPadding("right"), 0),
-      height: Math.max(clipHeight - totalPadding("top") - totalPadding("bottom"), 0)
-    };
+    return !Collection.isEqualBy(this.props, nextProps, ["clipId", "x", "y", "height", "width"]);
   }
 
   // Overridden in victory-core-native
@@ -81,8 +55,26 @@ export default class ClipPath extends React.Component {
   }
 
   render() {
-    const { clipId, className } = this.props;
-    const clipProps = { className, x: this.x, y: this.y, width: this.width, height: this.height };
+    const { clipId, className, x, y, width, height } = this.props;
+    const clipProps = { className, x, y, width, height };
     return this.renderClipPath(clipProps, clipId);
   }
 }
+
+const calculateAttributes = (props) => {
+  const { clipWidth, clipHeight, translateX, translateY } = props;
+  const padding = Helpers.getPadding(props);
+  const clipPadding = Helpers.getPadding({ padding: props.clipPadding });
+
+  const totalPadding = (side) => {
+    return padding[side] - clipPadding[side];
+  };
+  return {
+    x: totalPadding("left") + translateX,
+    y: totalPadding("top") + translateY,
+    width: Math.max(clipWidth - totalPadding("left") - totalPadding("right"), 0),
+    height: Math.max(clipHeight - totalPadding("top") - totalPadding("bottom"), 0)
+  };
+};
+
+export default addComputedProps(calculateAttributes, { alwaysRecompute: true })(ClipPath);
