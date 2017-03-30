@@ -6,6 +6,10 @@ import VictoryContainer from "../victory-container/victory-container";
 import VictoryTheme from "../victory-theme/victory-theme";
 import Point from "../victory-primitives/point";
 
+const fallbackProps = {
+  theme: VictoryTheme.grayscale
+};
+
 const defaultLegendData = [
   { name: "Series 1" },
   { name: "Series 2" }
@@ -76,7 +80,6 @@ export default class VictoryLegend extends React.Component {
     standalone: true,
     style: {},
     symbolSpacer: 8,
-    theme: VictoryTheme.grayscale,
     x: 0,
     y: 0
   };
@@ -110,10 +113,10 @@ export default class VictoryLegend extends React.Component {
     return !isEmpty(theme) ? colorScaleOptions || theme.colorScale : colorScaleOptions || [];
   }
 
-  getCalculatedProps() { // eslint-disable-line max-statements
+  getCalculatedProps(props) { // eslint-disable-line max-statements
     const { role } = this.constructor;
-    const { data, orientation, theme } = this.props;
-    let { height, padding, width } = this.props;
+    const { data, orientation, theme } = props;
+    let { height, padding, width } = props;
 
     const legendTheme = theme && theme[role] ? theme[role] : {};
     const parentStyles = this.getStyles({}, legendTheme, "parent");
@@ -147,7 +150,7 @@ export default class VictoryLegend extends React.Component {
     }
 
     return Object.assign({},
-      this.props,
+      props,
       { isHorizontal, height, labelStyles, padding, parentStyles, symbolStyles, textSizes, width }
     );
   }
@@ -265,8 +268,9 @@ export default class VictoryLegend extends React.Component {
   }
 
   render() {
-    const props = this.getCalculatedProps();
-    const group = this.renderGroup(props, this.renderLegendItems(props));
-    return props.standalone ? this.renderContainer(props, group) : group;
+    const props = Helpers.modifyProps(this.props, fallbackProps, this.constructor.role);
+    const calculatedProps = this.getCalculatedProps(props);
+    const group = this.renderGroup(calculatedProps, this.renderLegendItems(calculatedProps));
+    return calculatedProps.standalone ? this.renderContainer(calculatedProps, group) : group;
   }
 }

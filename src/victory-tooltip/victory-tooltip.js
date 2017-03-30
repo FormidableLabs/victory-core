@@ -9,7 +9,8 @@ import { assign, defaults } from "lodash";
 const fallbackProps = {
   cornerRadius: 5,
   pointerLength: 10,
-  pointerWidth: 10
+  pointerWidth: 10,
+  theme: VictoryTheme.grayscale
 };
 
 export default class VictoryTooltip extends React.Component {
@@ -79,7 +80,6 @@ export default class VictoryTooltip extends React.Component {
   };
 
   static defaultProps = {
-    theme: VictoryTheme.grayscale,
     active: false,
     renderInPortal: true,
     labelComponent: <VictoryLabel/>,
