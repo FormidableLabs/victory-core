@@ -38,7 +38,7 @@ describe("victory-primitives/point", () => {
       const directions = wrapper.render().find("path").attr("d");
 
       expect(stub.callCount).to.eql(1);
-      expect(stub.getCall(0).args).to.eql([5, 10, 1]);
+      expect(stub.getCall(0).args).to.eql([{ x: 5, y: 10, size: 1, precision: 2 }]);
       expect(directions).to.eql(`${symbol} symbol`);
     });
   });
