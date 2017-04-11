@@ -1,10 +1,6 @@
 /* eslint no-unused-expressions: 0 */
 import PathHelpers from "src/victory-primitives/path-helpers";
-
-const round = (value, precision) => {
-  const factor = Math.pow(10, precision || 0);
-  return Math.round(value * factor) / factor;
-};
+import { round } from "lodash";
 
 describe("path-helpers", () => {
   const x = 0;

@@ -1,9 +1,4 @@
-import { range } from "lodash";
-
-const round = (value, precision) => {
-  const factor = Math.pow(10, precision || 0);
-  return Math.round(value * factor, precision) / factor;
-};
+import { range, round } from "lodash";
 
 export default {
   circle(options) {
