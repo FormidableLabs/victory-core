@@ -1,5 +1,6 @@
 import { assign, isFunction, partialRight, defaults, fromPairs } from "lodash";
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import { PropTypes as CustomPropTypes, Events, Timer, Helpers } from "../victory-util/index";
 
 export default class VictorySharedEvents extends React.Component {
@@ -8,11 +9,11 @@ export default class VictorySharedEvents extends React.Component {
   static role = "shared-event-wrapper";
 
   static propTypes = {
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.arrayOf(React.PropTypes.node),
-      React.PropTypes.node
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
     ]),
-    container: React.PropTypes.node,
+    container: PropTypes.node,
     eventKey: PropTypes.oneOfType([
       PropTypes.array,
       PropTypes.func,
@@ -33,7 +34,7 @@ export default class VictorySharedEvents extends React.Component {
       ]),
       target: PropTypes.string
     })),
-    groupComponent: React.PropTypes.node
+    groupComponent: PropTypes.node
   };
 
   static defaultProps = {
@@ -41,11 +42,11 @@ export default class VictorySharedEvents extends React.Component {
   };
 
   static contextTypes = {
-    getTimer: React.PropTypes.func
+    getTimer: PropTypes.func
   };
 
   static childContextTypes = {
-    getTimer: React.PropTypes.func
+    getTimer: PropTypes.func
   };
 
   constructor() {

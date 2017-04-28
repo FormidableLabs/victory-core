@@ -1,4 +1,5 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import Helpers from "../victory-util/helpers";
 import pathHelpers from "./path-helpers";
 import { isEqual } from "lodash";
@@ -13,7 +14,7 @@ export default class Point extends React.Component {
     index: PropTypes.number,
     role: PropTypes.string,
     scale: PropTypes.object,
-    shapeRendering: React.PropTypes.string,
+    shapeRendering: PropTypes.string,
     size: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.func

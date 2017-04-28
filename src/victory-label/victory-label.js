@@ -1,5 +1,6 @@
 /*eslint no-magic-numbers: ["error", { "ignore": [0, 0.5, 1, 2] }]*/
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import { PropTypes as CustomPropTypes, Helpers, Style, Log } from "../victory-util/index";
 import { assign, merge, isEqual } from "lodash";
 
