@@ -1,4 +1,4 @@
-
+/*global setTimeout:false */
 import React from "react";
 import PropTypes from "prop-types";
 import * as d3Ease from "d3-ease";
@@ -126,7 +126,7 @@ export default class VictoryAnimation extends React.Component {
       this.interpolator = victoryInterpolator(this.state.data, data);
       /* reset step to zero */
       if (this.props.delay) {
-        setTimeout(() => { // eslint-disable-line no-undef
+        setTimeout(() => {
           this.loopID = this.getTimer().subscribe(
             this.functionToBeRunEachFrame, this.props.duration
           );
