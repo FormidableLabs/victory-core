@@ -1,3 +1,4 @@
+/*eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1, 2] }]*/
 /* global console */
 import { isFunction, find } from "lodash";
 
@@ -59,7 +60,7 @@ const getConstructorName = (value) => {
   } else if (value === null) {
     return "null";
   }
-  return Object.prototype.toString.call(value).slice(8, -1);
+  return Object.prototype.toString.call(value).slice(8, -1); // eslint-disable-line no-magic-numbers
 };
 
 export default {
@@ -93,15 +94,14 @@ export default {
    * @param {Array} validators Validation functions.
    * @returns {Function} Combined validator function
    */
+  // TODO(RYAN): Check with Lauren.
   allOfType(validators) {
-    return makeChainable((props, propName, componentName) => {
-      const error = validators.reduce((result, validator) => {
-        return result || validator(props, propName, componentName);
-      }, undefined);
-      if (error) {
-        return error;
-      }
-    });
+    return makeChainable((props, propName, componentName) =>
+      validators.reduce(
+        (result, validator) => result || validator(props, propName, componentName),
+        undefined
+      )
+    );
   },
 
   /**
@@ -114,6 +114,7 @@ export default {
         `\`${propName}\` in \`${componentName}\` must be a non-negative number.`
       );
     }
+    return undefined;
   }),
 
   /**
@@ -126,6 +127,7 @@ export default {
         `\`${propName}\` in \`${componentName}\` must be an integer.`
       );
     }
+    return undefined;
   }),
 
   /**
@@ -138,6 +140,7 @@ export default {
         `\`${propName}\` in \`${componentName}\` must be a number greater than zero.`
       );
     }
+    return undefined;
   }),
 
   /**
@@ -150,6 +153,7 @@ export default {
         `\`${propName}\` in \`${componentName}\` must be an array of two unique numeric values.`
       );
     }
+    return undefined;
   }),
 
   /**
@@ -172,6 +176,7 @@ export default {
         `\`${propName}\` in \`${componentName}\` must be a d3 scale.`
       );
     }
+    return undefined;
   }),
 
   /**
@@ -205,6 +210,7 @@ export default {
         `\`${otherConstructorName}\`.`
       );
     }
+    return undefined;
   }),
 
   /**
@@ -218,5 +224,6 @@ export default {
     ) {
       return new Error(`Length of data and ${propName} arrays must match.`);
     }
+    return undefined;
   })
 };
