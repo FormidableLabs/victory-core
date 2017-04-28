@@ -7,21 +7,21 @@ export default class VictoryContainer extends React.Component {
   static displayName = "VictoryContainer";
   static role = "container";
   static propTypes = {
-    className: PropTypes.string,
-    style: PropTypes.object,
-    height: PropTypes.number,
-    width: PropTypes.number,
-    events: PropTypes.object,
     children: React.PropTypes.oneOfType([
       React.PropTypes.arrayOf(React.PropTypes.node),
       React.PropTypes.node
     ]),
-    title: PropTypes.string,
+    className: PropTypes.string,
     desc: PropTypes.string,
+    events: PropTypes.object,
+    height: PropTypes.number,
     portalComponent: PropTypes.element,
     responsive: PropTypes.bool,
     standalone: PropTypes.bool,
-    theme: PropTypes.object
+    style: PropTypes.object,
+    theme: PropTypes.object,
+    title: PropTypes.string,
+    width: PropTypes.number
   }
 
   static defaultProps = {
@@ -45,8 +45,21 @@ export default class VictoryContainer extends React.Component {
     this.getTimer = this.getTimer.bind(this);
   }
 
+  getChildContext() {
+    return this.props.standalone !== false ?
+      {
+        portalUpdate: this.portalUpdate,
+        portalRegister: this.portalRegister,
+        portalDeregister: this.portalDeregister,
+        getTimer: this.getTimer
+      } : {};
+  }
+
   componentWillMount() {
-    this.savePortalRef = (portal) => this.portalRef = portal;
+    this.savePortalRef = (portal) => {
+      this.portalRef = portal;
+      return portal;
+    };
     this.portalUpdate = (key, el) => this.portalRef.portalUpdate(key, el);
     this.portalRegister = () => this.portalRef.portalRegister();
     this.portalDeregister = (key) => this.portalRef.portalDeregister(key);
@@ -56,16 +69,6 @@ export default class VictoryContainer extends React.Component {
     if (!this.context.getTimer) {
       this.getTimer().stop();
     }
-  }
-
-  getChildContext() {
-    return this.props.standalone !== false ?
-      {
-        portalUpdate: this.portalUpdate,
-        portalRegister: this.portalRegister,
-        portalDeregister: this.portalDeregister,
-        getTimer: this.getTimer
-      } : {};
   }
 
   getTimer() {
@@ -87,7 +90,7 @@ export default class VictoryContainer extends React.Component {
   renderContainer(props, svgProps, style) {
     const { title, desc, portalComponent, className, standalone } = props;
     const children = this.getChildren(props);
-    const parentProps = defaults({style, className}, svgProps);
+    const parentProps = defaults({ style, className }, svgProps);
     const groupComponent = props.groupComponent || <g/>;
     return standalone !== false ?
       (
@@ -95,7 +98,7 @@ export default class VictoryContainer extends React.Component {
           {title ? <title id="title">{title}</title> : null}
           {desc ? <desc id="desc">{desc}</desc> : null}
           {children}
-          {React.cloneElement(portalComponent, {ref: this.savePortalRef})}
+          {React.cloneElement(portalComponent, { ref: this.savePortalRef })}
         </svg>
       ) :
       React.cloneElement(groupComponent, parentProps, children);

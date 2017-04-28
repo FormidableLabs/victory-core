@@ -8,6 +8,11 @@ export default class VictoryAnimation extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.func,
+    data: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.array
+    ]),
+    delay: React.PropTypes.number,
     duration: React.PropTypes.number,
     easing: React.PropTypes.oneOf([
       "back", "backIn", "backOut", "backInOut",
@@ -21,12 +26,7 @@ export default class VictoryAnimation extends React.Component {
       "quad", "quadIn", "quadOut", "quadInOut",
       "sin", "sinIn", "sinOut", "sinInOut"
     ]),
-    delay: React.PropTypes.number,
-    onEnd: React.PropTypes.func,
-    data: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.array
-    ])
+    onEnd: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -64,16 +64,6 @@ export default class VictoryAnimation extends React.Component {
     this.getTimer = this.getTimer.bind(this);
   }
 
-  getTimer() {
-    if (this.context.getTimer) {
-      return this.context.getTimer();
-    }
-    if (!this.timer) {
-      this.timer = new Timer();
-    }
-    return this.timer;
-  }
-
   componentDidMount() {
     // Length check prevents us from triggering `onEnd` in `traverseQueue`.
     if (this.queue.length) {
@@ -107,6 +97,16 @@ export default class VictoryAnimation extends React.Component {
     } else {
       this.getTimer().stop();
     }
+  }
+
+  getTimer() {
+    if (this.context.getTimer) {
+      return this.context.getTimer();
+    }
+    if (!this.timer) {
+      this.timer = new Timer();
+    }
+    return this.timer;
   }
 
   toNewName(ease) {

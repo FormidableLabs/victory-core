@@ -4,23 +4,12 @@ import { Helpers, Collection } from "../victory-util";
 import { assign } from "lodash";
 
 export default class ErrorBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   static propTypes = {
     active: PropTypes.bool,
+    borderWidth: PropTypes.number,
     className: PropTypes.string,
-    index: PropTypes.number,
-    datum: PropTypes.object,
     data: PropTypes.array,
-    events: PropTypes.object,
-    scale: PropTypes.object,
-    shapeRendering: PropTypes.string,
-    role: PropTypes.string,
-    style: PropTypes.object,
-    x: PropTypes.number,
-    y: PropTypes.number,
+    datum: PropTypes.object,
     errorX: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.array,
@@ -31,8 +20,15 @@ export default class ErrorBar extends React.Component {
       PropTypes.array,
       PropTypes.bool
     ]),
-    borderWidth: PropTypes.number,
-    groupComponent: PropTypes.element
+    events: PropTypes.object,
+    groupComponent: PropTypes.element,
+    index: PropTypes.number,
+    role: PropTypes.string,
+    scale: PropTypes.object,
+    shapeRendering: PropTypes.string,
+    style: PropTypes.object,
+    x: PropTypes.number,
+    y: PropTypes.number
   };
 
   static defaultProps = {
@@ -40,12 +36,16 @@ export default class ErrorBar extends React.Component {
     groupComponent: <g/>
   }
 
+  constructor(props) {
+    super(props);
+  }
+
   componentWillMount() {
     this.style = this.getStyle(this.props);
   }
 
   shouldComponentUpdate(nextProps) {
-    const {x, y, errorX, errorY} = this.props;
+    const { x, y, errorX, errorY } = this.props;
     const nextStyle = this.getStyle(nextProps);
 
     if (!Collection.allSetsEqual([
@@ -64,7 +64,7 @@ export default class ErrorBar extends React.Component {
 
   getStyle(props) {
     const { style, datum, active } = props;
-    return Helpers.evaluateStyle(assign({stroke: "black"}, style), datum, active);
+    return Helpers.evaluateStyle(assign({ stroke: "black" }, style), datum, active);
   }
 
   // Overridden in victory-core-native
@@ -73,7 +73,7 @@ export default class ErrorBar extends React.Component {
   }
 
   renderBorder(props, error, type) {
-    const {x, y, borderWidth, events, style, role, shapeRendering, className} = props;
+    const { x, y, borderWidth, events, style, role, shapeRendering, className } = props;
     const vertical = type === "Right" || type === "Left";
     const errorPortion = error[`error${type}`];
     const borderProps = {
@@ -88,7 +88,7 @@ export default class ErrorBar extends React.Component {
   }
 
   renderCross(props, error, type) {
-    const {x, y, events, style, role, shapeRendering, className} = props;
+    const { x, y, events, style, role, shapeRendering, className } = props;
     const vertical = type === "Top" || type === "Bottom";
     const errorPortion = error[`error${type}`];
     const borderProps = {
@@ -156,7 +156,7 @@ export default class ErrorBar extends React.Component {
     return React.cloneElement(
       this.props.groupComponent,
       {},
-      this.renderErrorBar({errorTop, errorBottom, errorRight, errorLeft}, props)
+      this.renderErrorBar({ errorTop, errorBottom, errorRight, errorLeft }, props)
     );
   }
 }

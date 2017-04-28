@@ -6,9 +6,8 @@ import {
 export default class ClipPath extends React.Component {
   static propTypes = {
     className: PropTypes.string,
-    clipId: PropTypes.number,
     clipHeight: CustomPropTypes.nonNegative,
-    clipWidth: CustomPropTypes.nonNegative,
+    clipId: PropTypes.number,
     clipPadding: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.shape({
@@ -18,6 +17,7 @@ export default class ClipPath extends React.Component {
         right: PropTypes.number
       })
     ]),
+    clipWidth: CustomPropTypes.nonNegative,
     translateX: PropTypes.number,
     translateY: PropTypes.number
   };

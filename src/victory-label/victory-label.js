@@ -1,3 +1,4 @@
+/*eslint no-magic-numbers: ["error", { "ignore": [0, 0.5, 1, 2] }]*/
 import React, { PropTypes } from "react";
 import { PropTypes as CustomPropTypes, Helpers, Style, Log } from "../victory-util/index";
 import { assign, merge, isEqual } from "lodash";
@@ -14,7 +15,6 @@ export default class VictoryLabel extends React.Component {
   static role = "label";
   static propTypes = {
     active: PropTypes.bool,
-    className: PropTypes.string,
     angle: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
@@ -24,16 +24,21 @@ export default class VictoryLabel extends React.Component {
       CustomPropTypes.nonNegative,
       PropTypes.func
     ]),
-    datum: PropTypes.any,
+    className: PropTypes.string,
     data: PropTypes.array,
-    index: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    events: PropTypes.object,
-    text: PropTypes.oneOfType([
-      PropTypes.string,
+    datum: PropTypes.any,
+    dx: PropTypes.oneOfType([
       PropTypes.number,
-      PropTypes.func,
-      PropTypes.array
+      PropTypes.string,
+      PropTypes.func
     ]),
+    dy: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+      PropTypes.func
+    ]),
+    events: PropTypes.object,
+    index: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     lineHeight: PropTypes.oneOfType([
       PropTypes.string,
       CustomPropTypes.nonNegative,
@@ -41,6 +46,12 @@ export default class VictoryLabel extends React.Component {
     ]),
     style: PropTypes.oneOfType([
       PropTypes.object,
+      PropTypes.array
+    ]),
+    text: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.func,
       PropTypes.array
     ]),
     textAnchor: PropTypes.oneOfType([
@@ -52,6 +63,11 @@ export default class VictoryLabel extends React.Component {
       ]),
       PropTypes.func
     ]),
+    transform: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+      PropTypes.func
+    ]),
     verticalAnchor: PropTypes.oneOfType([
       PropTypes.oneOf([
         "start",
@@ -60,23 +76,8 @@ export default class VictoryLabel extends React.Component {
       ]),
       PropTypes.func
     ]),
-    transform: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-      PropTypes.func
-    ]),
     x: PropTypes.number,
-    y: PropTypes.number,
-    dx: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-      PropTypes.func
-    ]),
-    dy: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-      PropTypes.func
-    ])
+    y: PropTypes.number
   };
 
   static defaultProps = {
@@ -88,21 +89,10 @@ export default class VictoryLabel extends React.Component {
     this.cacheAttributes(this.calculateAttributes(this.props));
   }
 
-  cacheAttributes(attrs) {
-    const { style, dx, dy, content, textAnchor, transform, lineHeight } = attrs;
-    this.style = style;
-    this.dx = dx;
-    this.dy = dy;
-    this.content = content;
-    this.textAnchor = textAnchor;
-    this.lineHeight = lineHeight;
-    this.transform = transform;
-  }
-
   shouldComponentUpdate(nextProps) {
     const attrs = this.calculateAttributes(nextProps);
     const { style, dx, dy, content, lineHeight, textAnchor, transform } = attrs;
-    const {x, y} = this.props;
+    const { x, y } = this.props;
     if (
       x !== nextProps.x ||
       y !== nextProps.y ||
@@ -118,6 +108,17 @@ export default class VictoryLabel extends React.Component {
       return true;
     }
     return false;
+  }
+
+  cacheAttributes(attrs) {
+    const { style, dx, dy, content, textAnchor, transform, lineHeight } = attrs;
+    this.style = style;
+    this.dx = dx;
+    this.dy = dy;
+    this.content = content;
+    this.textAnchor = textAnchor;
+    this.lineHeight = lineHeight;
+    this.transform = transform;
   }
 
   calculateAttributes(props) {
@@ -139,7 +140,7 @@ export default class VictoryLabel extends React.Component {
     style = style ? merge({}, defaultStyles, style) : defaultStyles;
     const datum = props.datum || props.data;
     const baseStyles = Helpers.evaluateStyle(style, datum, props.active);
-    return assign({}, baseStyles, {fontSize: this.getFontSize(baseStyles)});
+    return assign({}, baseStyles, { fontSize: this.getFontSize(baseStyles) });
   }
 
   getStyles(props) {
@@ -183,11 +184,11 @@ export default class VictoryLabel extends React.Component {
   }
 
   getTransform(props, style) {
-    const {datum, x, y} = props;
+    const { datum, x, y } = props;
     const angle = style.angle || props.angle;
     const transform = props.transform || style.transform;
     const transformPart = transform && Helpers.evaluateProp(transform, datum);
-    const rotatePart = angle && {rotate: [angle, x, y]};
+    const rotatePart = angle && { rotate: [angle, x, y] };
     return transformPart || angle ?
       Style.toTransformString(transformPart, rotatePart) : undefined;
   }

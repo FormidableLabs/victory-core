@@ -7,36 +7,36 @@ export default class Point extends React.Component {
   static propTypes = {
     active: PropTypes.bool,
     className: PropTypes.string,
-    datum: PropTypes.object,
     data: PropTypes.array,
+    datum: PropTypes.object,
     events: PropTypes.object,
     index: PropTypes.number,
     role: PropTypes.string,
+    scale: PropTypes.object,
+    shapeRendering: React.PropTypes.string,
     size: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.func
     ]),
-    shapeRendering: React.PropTypes.string,
+    style: PropTypes.object,
     symbol: PropTypes.oneOfType([
       PropTypes.oneOf([
         "circle", "diamond", "plus", "square", "star", "triangleDown", "triangleUp"
       ]),
       PropTypes.func
     ]),
-    scale: PropTypes.object,
-    style: PropTypes.object,
     x: PropTypes.number,
     y: PropTypes.number
   };
 
   componentWillMount() {
-    const {style, path} = this.calculateAttributes(this.props);
+    const { style, path } = this.calculateAttributes(this.props);
     this.style = style;
     this.path = path;
   }
 
   shouldComponentUpdate(nextProps) {
-    const {style, path} = this.calculateAttributes(nextProps);
+    const { style, path } = this.calculateAttributes(nextProps);
     if (path !== this.path || !isEqual(style, this.style)) {
       this.style = style;
       this.path = path;
@@ -54,7 +54,7 @@ export default class Point extends React.Component {
   }
 
   getPath(props) {
-    const {datum, active, x, y} = props;
+    const { datum, active, x, y } = props;
     const pathFunctions = {
       circle: pathHelpers.circle,
       square: pathHelpers.square,

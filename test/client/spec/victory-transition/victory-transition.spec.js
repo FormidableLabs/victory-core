@@ -5,10 +5,10 @@ import React from "react";
 import { mount } from "enzyme";
 import VictoryTransition from "src/victory-transition/victory-transition";
 
-const TestComponent = React.createClass({
-  propTypes: {
+class TestComponent extends React.Component {
+  static propTypes = {
     message: React.PropTypes.array
-  },
+  }
 
   render() {
     return (
@@ -17,13 +17,13 @@ const TestComponent = React.createClass({
       </text>
     );
   }
-});
+}
 
 describe("components/victory-transition", () => {
   it("renders a child component", () => {
     const wrapper = mount(
-      <VictoryTransition animate={{duration: 0}} animationWhitelist={["data"]}>
-        <TestComponent animate={{duration: 0}} message={["HELLO"]} />
+      <VictoryTransition animate={{ duration: 0 }} animationWhitelist={["data"]}>
+        <TestComponent animate={{ duration: 0 }} message={["HELLO"]} />
       </VictoryTransition>
     );
     const output = wrapper.find(".foo");

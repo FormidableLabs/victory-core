@@ -9,10 +9,10 @@ import { Router, Route, Link, hashHistory } from "react-router";
 
 const content = document.getElementById("content");
 
-const App = React.createClass({
-  propTypes: {
+class App extends React.Component {
+  static propTypes = {
     children: React.PropTypes.element
-  },
+  }
 
   render() {
     return (
@@ -28,7 +28,7 @@ const App = React.createClass({
       </div>
     );
   }
-});
+}
 
 ReactDOM.render((
   <Router history={hashHistory}>

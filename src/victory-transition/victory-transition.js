@@ -8,8 +8,8 @@ export default class VictoryTransition extends React.Component {
 
   static propTypes = {
     animate: React.PropTypes.object,
-    children: React.PropTypes.node,
-    animationWhitelist: React.PropTypes.array
+    animationWhitelist: React.PropTypes.array,
+    children: React.PropTypes.node
   };
 
   constructor(props) {
@@ -24,6 +24,21 @@ export default class VictoryTransition extends React.Component {
     this.getTimer = this.getTimer.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({ nodesShouldLoad: true }); //eslint-disable-line react/no-did-mount-set-state
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.getTimer().bypassAnimation();
+    this.setState(
+      this.getTransitionState(this.props, nextProps), () => this.getTimer().resumeAnimation()
+    );
+  }
+
+  componentWillUnmount() {
+    this.getTimer().stop();
+  }
+
   getTimer() {
     if (this.context.getTimer) {
       return this.context.getTimer();
@@ -34,21 +49,6 @@ export default class VictoryTransition extends React.Component {
     return this.timer;
   }
 
-  componentDidMount() {
-    this.setState({nodesShouldLoad: true}); //eslint-disable-line react/no-did-mount-set-state
-  }
-
-  componentWillUnmount() {
-    this.getTimer().stop();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.getTimer().bypassAnimation();
-    this.setState(
-      this.getTransitionState(this.props, nextProps), () => this.getTimer().resumeAnimation()
-    );
-  }
-
   getTransitionState(props, nextProps) {
     const { animate } = props;
     if (!animate) {
@@ -56,7 +56,7 @@ export default class VictoryTransition extends React.Component {
     } else if (animate.parentState) {
       const state = animate.parentState;
       const oldProps = state.nodesWillExit ? props : null;
-      return {oldProps, nextProps};
+      return { oldProps, nextProps };
     } else {
       const oldChildren = React.Children.toArray(props.children);
       const nextChildren = React.Children.toArray(nextProps.children);
@@ -145,7 +145,7 @@ export default class VictoryTransition extends React.Component {
       y: this.getDomainFromChildren(props, "y")
     };
     const clipWidth = this.getClipWidth(props, child);
-    const combinedProps = defaults({domain, clipWidth}, transitionProps, child.props);
+    const combinedProps = defaults({ domain, clipWidth }, transitionProps, child.props);
     const animationWhitelist = props.animationWhitelist || [];
     const whitelist = animationWhitelist.concat(["clipWidth"]);
     const propsToAnimate = whitelist.length ? pick(combinedProps, whitelist) : combinedProps;
@@ -160,11 +160,11 @@ export default class VictoryTransition extends React.Component {
               ) :
               child.props.groupComponent;
             return React.cloneElement(
-              child, defaults({animate: null, groupComponent}, newProps, combinedProps)
+              child, defaults({ animate: null, groupComponent }, newProps, combinedProps)
             );
           }
           return React.cloneElement(
-            child, defaults({animate: null}, newProps, combinedProps)
+            child, defaults({ animate: null }, newProps, combinedProps)
           );
         }}
       </VictoryAnimation>

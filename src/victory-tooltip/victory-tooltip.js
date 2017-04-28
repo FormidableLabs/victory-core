@@ -1,9 +1,10 @@
+/*eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1, 2] }]*/
 import React, { PropTypes } from "react";
 import { PropTypes as CustomPropTypes, TextSize, Helpers } from "../victory-util/index";
 import { default as VictoryLabel } from "../victory-label/victory-label";
 import { default as VictoryTheme } from "../victory-theme/victory-theme";
 import { Flyout } from "../victory-primitives/index";
-import { default as VictoryPortal} from "../victory-portal/victory-portal";
+import { default as VictoryPortal } from "../victory-portal/victory-portal";
 import { assign, defaults } from "lodash";
 
 const fallbackProps = {
@@ -16,27 +17,17 @@ export default class VictoryTooltip extends React.Component {
   static displayName = "VictoryTooltip";
 
   static propTypes = {
+    activateData: PropTypes.bool,
     active: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.func
     ]),
-    activateData: PropTypes.bool,
-    datum: PropTypes.object,
+    cornerRadius: PropTypes.oneOfType([
+      CustomPropTypes.nonNegative,
+      PropTypes.func
+    ]),
     data: PropTypes.array,
-    events: PropTypes.object,
-    text: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.func,
-      PropTypes.array
-    ]),
-    style: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array
-    ]),
-    flyoutStyle: PropTypes.object,
-    x: PropTypes.number,
-    y: PropTypes.number,
+    datum: PropTypes.object,
     dx: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.func
@@ -45,14 +36,17 @@ export default class VictoryTooltip extends React.Component {
       PropTypes.number,
       PropTypes.func
     ]),
-    width: PropTypes.oneOfType([
-      CustomPropTypes.nonNegative,
-      PropTypes.func
-    ]),
+    events: PropTypes.object,
+    flyoutComponent: PropTypes.element,
+    flyoutStyle: PropTypes.object,
+    groupComponent: PropTypes.element,
     height: PropTypes.oneOfType([
       CustomPropTypes.nonNegative,
       PropTypes.func
     ]),
+    horizontal: PropTypes.bool,
+    index: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    labelComponent: PropTypes.element,
     orientation: PropTypes.oneOfType([
       PropTypes.oneOf(["top", "bottom", "left", "right"]),
       PropTypes.func
@@ -65,17 +59,24 @@ export default class VictoryTooltip extends React.Component {
       CustomPropTypes.nonNegative,
       PropTypes.func
     ]),
-    cornerRadius: PropTypes.oneOfType([
+    renderInPortal: PropTypes.bool,
+    style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array
+    ]),
+    text: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.func,
+      PropTypes.array
+    ]),
+    theme: PropTypes.object,
+    width: PropTypes.oneOfType([
       CustomPropTypes.nonNegative,
       PropTypes.func
     ]),
-    horizontal: PropTypes.bool,
-    labelComponent: PropTypes.element,
-    flyoutComponent: PropTypes.element,
-    groupComponent: PropTypes.element,
-    index: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    renderInPortal: PropTypes.bool,
-    theme: PropTypes.object
+    x: PropTypes.number,
+    y: PropTypes.number
   };
 
   static defaultProps = {
@@ -97,7 +98,7 @@ export default class VictoryTooltip extends React.Component {
             mutation: () => ({ active: true })
           }, {
             target: "data",
-            mutation: () => targetProps.activateData ? ({ active: true }) : ({active: undefined})
+            mutation: () => targetProps.activateData ? ({ active: true }) : ({ active: undefined })
           }
         ];
       },
@@ -105,10 +106,10 @@ export default class VictoryTooltip extends React.Component {
         return [
           {
             target: "labels",
-            mutation: () => ({active: undefined})
+            mutation: () => ({ active: undefined })
           }, {
             target: "data",
-            mutation: () => ({active: undefined})
+            mutation: () => ({ active: undefined })
           }
         ];
       }
@@ -170,12 +171,12 @@ export default class VictoryTooltip extends React.Component {
     const labelSize = TextSize.approximateTextSize(text, labelStyle);
     const flyoutDimensions = this.getDimensions(props, labelSize, labelStyle);
     const flyoutCenter = this.getFlyoutCenter(props, flyoutDimensions);
-    return {labelStyle, flyoutStyle, labelSize, flyoutDimensions, flyoutCenter};
+    return { labelStyle, flyoutStyle, labelSize, flyoutDimensions, flyoutCenter };
   }
 
   getFlyoutCenter(props, dimensions) {
-    const {x, y, dx, dy, pointerLength, orientation} = props;
-    const {height, width} = dimensions;
+    const { x, y, dx, dy, pointerLength, orientation } = props;
+    const { height, width } = dimensions;
     const sign = orientation === "right" || orientation === "top" ? 1 : -1;
     return {
       x: orientation === "left" || orientation === "right" ?
@@ -239,7 +240,7 @@ export default class VictoryTooltip extends React.Component {
   }
 
   getFlyoutProps(props, calculatedValues) {
-    const {flyoutDimensions, flyoutStyle} = calculatedValues;
+    const { flyoutDimensions, flyoutStyle } = calculatedValues;
     const {
       x, y, dx, dy, orientation, pointerLength, pointerWidth, cornerRadius,
       events, flyoutComponent, index
