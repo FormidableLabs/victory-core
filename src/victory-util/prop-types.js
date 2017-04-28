@@ -91,7 +91,6 @@ export default {
    * @param {Array} validators Validation functions.
    * @returns {Function} Combined validator function
    */
-  // TODO(RYAN): Check with Lauren.
   allOfType(validators) {
     return makeChainable((props, propName, componentName, ...rest) =>
       validators.reduce(
