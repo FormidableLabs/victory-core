@@ -4,6 +4,10 @@ import { assign, omit, defaults } from "lodash";
 import Portal from "../victory-portal/portal";
 import { Timer } from "../victory-util/index";
 
+const fallbackProps = {
+  theme: VictoryTheme.grayscale
+};
+
 export default class VictoryContainer extends React.Component {
   static displayName = "VictoryContainer";
   static role = "container";
@@ -106,8 +110,9 @@ export default class VictoryContainer extends React.Component {
   }
 
   render() {
-    const { width, height, responsive, events, standalone } = this.props;
-    const style = responsive ? this.props.style : omit(this.props.style, ["height", "width"]);
+    const props = defaults({}, this.props, fallbackProps);
+    const { width, height, responsive, events, standalone } = props;
+    const style = responsive ? props.style : omit(props.style, ["height", "width"]);
     const svgProps = assign(
       {
         width, height,
@@ -117,6 +122,6 @@ export default class VictoryContainer extends React.Component {
       },
       events
     );
-    return this.renderContainer(this.props, svgProps, style);
+    return this.renderContainer(props, svgProps, style);
   }
 }
