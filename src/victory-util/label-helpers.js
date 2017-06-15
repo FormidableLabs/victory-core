@@ -142,7 +142,7 @@ export default {
   },
 
   getProps(props, index) {
-    const { scale, data, style, horizontal, polar } = props;
+    const { scale, data, style, horizontal, polar, origin } = props;
     const datum = data[index];
     const degrees = this.getDegrees(props, datum);
     const textAnchor = polar ?
@@ -154,7 +154,7 @@ export default {
     const labelPlacement = this.getLabelPlacement(props);
     const { x, y } = this.getPosition(props, datum);
     return {
-      angle, data, datum, horizontal, index, polar, scale, labelPlacement,
+      angle, data, datum, horizontal, index, polar, origin, scale, labelPlacement,
       text, textAnchor, verticalAnchor, x, y, style: style.labels
     };
   }
