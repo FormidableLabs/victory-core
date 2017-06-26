@@ -6,6 +6,7 @@ import AnimationDemo from "./victory-animation-demo";
 import LabelDemo from "./victory-label-demo";
 import LegendDemo from "./victory-legend-demo";
 import TooltipDemo from "./victory-tooltip-demo";
+import CurveDemo from "./curve-demo";
 
 class Home extends React.Component {
   render() {
@@ -38,6 +39,7 @@ class App extends React.Component {
     case "/label": Child = LabelDemo; break;
     case "/legend": Child = LegendDemo; break;
     case "/tooltip": Child = TooltipDemo; break;
+    case "/curve": Child = CurveDemo; break;
     default: Child = Home;
     }
     return Child;
@@ -53,6 +55,7 @@ class App extends React.Component {
           <li><a href="#/label">Victory Label Demo</a></li>
           <li><a href="#/legend">Victory Legend Demo</a></li>
           <li><a href="#/tooltip">Victory Tooltip Demo</a></li>
+          <li><a href="#/curve">Curve Demo</a></li>
         </ul>
         <Child/>
       </div>
