@@ -40,18 +40,18 @@ export default class Curve extends React.Component {
   }
 
   getLineFunction(props) {
-    const { polar, scale, openCurve } = props;
-    const interpolation = polar && !openCurve ?
-      `${this.toNewName(props.interpolation)}Closed` : this.toNewName(props.interpolation);
-    return polar ?
+    const { polar, scale, openCurve, interpolation } = props;
+    const d3interpolation = polar && !openCurve ?
+      `${this.toNewName(interpolation)}Closed` : this.toNewName(interpolation);
+    return (polar || interpolation === "radial") ?
       d3Shape.lineRadial()
         .defined(defined)
-        .curve(d3Shape[interpolation])
+        .curve(d3Shape[d3interpolation])
         .angle(getAngleAccessor(scale))
         .radius(getYAccessor(scale)) :
       d3Shape.line()
         .defined(defined)
-        .curve(d3Shape[interpolation])
+        .curve(d3Shape[d3interpolation])
         .x(getXAccessor(scale))
         .y(getYAccessor(scale));
   }
@@ -70,7 +70,8 @@ export default class Curve extends React.Component {
   toNewName(interpolation) {
     // d3 shape changed the naming scheme for interpolators from "basis" -> "curveBasis" etc.
     const capitalize = (s) => s && s[0].toUpperCase() + s.slice(1);
-    return `curve${capitalize(interpolation)}`;
+    const prefix = (interpolation === "radial") ? "line" : "curve";
+    return `${prefix}${capitalize(interpolation)}`;
   }
 
   // Overridden in victory-core-native
