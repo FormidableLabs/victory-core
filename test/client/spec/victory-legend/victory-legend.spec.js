@@ -205,3 +205,42 @@ describe("components/victory-legend", () => {
     });
   });
 });
+
+const LegendGroupTest = (props) => {
+  const { width, height } = props; // eslint-disable-line react/prop-types
+  expect(width).to.be.above(0);
+  expect(height).to.be.above(0);
+  return <div />;
+};
+
+describe("groupComponent", () => {
+  const legendData = [{
+    name: "Series 1",
+    labels: {
+      fontSize: 10
+    },
+    symbol: {
+      type: "circle",
+      fill: "red"
+    }
+  }, {
+    name: "Long Series Name",
+    labels: {
+      fontSize: 12
+    },
+    symbol: {
+      type: "triangleUp",
+      fill: "blue"
+    }
+  }];
+
+  it("has width and height values set", () => {
+    render(
+      <VictoryLegend
+        data={legendData}
+        standalone={false}
+        groupComponent={<LegendGroupTest />}
+      />
+    );
+  });
+});
