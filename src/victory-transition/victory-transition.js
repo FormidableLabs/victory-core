@@ -24,9 +24,9 @@ export default class VictoryTransition extends React.Component {
     };
     const child = this.props.children;
     const polar = child.props.polar;
+    this.timer = new Timer();
     this.continuous = !polar && child.type && child.type.continuous === true;
     this.getTransitionState = this.getTransitionState.bind(this);
-    this.getTimer = this.getTimer.bind(this);
   }
 
   componentDidMount() {
@@ -34,24 +34,16 @@ export default class VictoryTransition extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.getTimer().bypassAnimation();
+    this.timer.bypassAnimation();
     this.setState(
-      this.getTransitionState(this.props, nextProps), () => this.getTimer().resumeAnimation()
+      this.getTransitionState(this.props, nextProps), () => this.timer.resumeAnimation()
     );
   }
 
   componentWillUnmount() {
-    this.getTimer().stop();
-  }
+    this.timer.stop();
 
-  getTimer() {
-    if (this.context.getTimer) {
-      return this.context.getTimer();
-    }
-    if (!this.timer) {
-      this.timer = new Timer();
-    }
-    return this.timer;
+    this.timer = null;
   }
 
   getTransitionState(props, nextProps) {
@@ -140,7 +132,11 @@ export default class VictoryTransition extends React.Component {
       Transitions.getTransitionPropsFactory(
         props,
         this.state,
-        (newState) => this.setState(newState)
+        (newState) => {
+          if (this.timer) {
+            this.setState(newState);
+          }
+        }
       );
     const child = React.Children.toArray(props.children)[0];
     const transitionProps = getTransitionProps(child);
