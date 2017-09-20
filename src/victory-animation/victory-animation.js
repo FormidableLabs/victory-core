@@ -38,10 +38,6 @@ export default class VictoryAnimation extends React.Component {
     easing: "quadInOut"
   };
 
-  static contextTypes = {
-    getTimer: PropTypes.func
-  };
-
   constructor(props) {
     super(props);
     /* defaults */
@@ -53,6 +49,7 @@ export default class VictoryAnimation extends React.Component {
         animating: false
       }
     };
+    this.timer = new Timer();
     this.interpolator = null;
     this.queue = Array.isArray(this.props.data) ?
       this.props.data.slice(1) : [];
@@ -63,7 +60,6 @@ export default class VictoryAnimation extends React.Component {
       so we bind functionToBeRunEachFrame to current instance of victory animation class
     */
     this.functionToBeRunEachFrame = this.functionToBeRunEachFrame.bind(this);
-    this.getTimer = this.getTimer.bind(this);
   }
 
   componentDidMount() {
@@ -76,7 +72,7 @@ export default class VictoryAnimation extends React.Component {
   /* lifecycle */
   componentWillReceiveProps(nextProps) {
     /* cancel existing loop if it exists */
-    this.getTimer().unsubscribe(this.loopID);
+    this.timer.unsubscribe(this.loopID);
 
     /* If an object was supplied */
     if (!Array.isArray(nextProps.data)) {
@@ -95,20 +91,12 @@ export default class VictoryAnimation extends React.Component {
 
   componentWillUnmount() {
     if (this.loopID) {
-      this.getTimer().unsubscribe(this.loopID);
+      this.timer.unsubscribe(this.loopID);
     } else {
-      this.getTimer().stop();
+      this.timer.stop();
     }
-  }
 
-  getTimer() {
-    if (this.context.getTimer) {
-      return this.context.getTimer();
-    }
-    if (!this.timer) {
-      this.timer = new Timer();
-    }
-    return this.timer;
+    this.timer = null;
   }
 
   toNewName(ease) {
@@ -127,12 +115,14 @@ export default class VictoryAnimation extends React.Component {
       /* reset step to zero */
       if (this.props.delay) {
         setTimeout(() => {
-          this.loopID = this.getTimer().subscribe(
-            this.functionToBeRunEachFrame, this.props.duration
-          );
+          if (this.timer) {
+            this.loopID = this.timer.subscribe(
+              this.functionToBeRunEachFrame, this.props.duration
+            );
+          }
         }, this.props.delay);
       } else {
-        this.loopID = this.getTimer().subscribe(
+        this.loopID = this.timer.subscribe(
           this.functionToBeRunEachFrame, this.props.duration
         );
       }
@@ -149,15 +139,17 @@ export default class VictoryAnimation extends React.Component {
     duration = duration !== undefined ? duration : this.props.duration;
     const step = duration ? elapsed / duration : 1;
     if (step >= 1) {
-      this.setState({
-        data: this.interpolator(1),
-        animationInfo: {
-          progress: 1,
-          animating: false
+      if (this.timer) {
+        this.setState({
+          data: this.interpolator(1),
+          animationInfo: {
+            progress: 1,
+            animating: false
+          }
+        });
+        if (this.loopID) {
+          this.timer.unsubscribe(this.loopID);
         }
-      });
-      if (this.loopID) {
-        this.getTimer().unsubscribe(this.loopID);
       }
       this.queue.shift();
       this.traverseQueue();
@@ -168,13 +160,15 @@ export default class VictoryAnimation extends React.Component {
       current step value that's transformed by the ease function to the
       interpolator, which is cached for performance whenever props are received
     */
-    this.setState({
-      data: this.interpolator(this.ease(step)),
-      animationInfo: {
-        progress: step,
-        animating: step < 1
-      }
-    });
+    if (this.timer) {
+      this.setState({
+        data: this.interpolator(this.ease(step)),
+        animationInfo: {
+          progress: step,
+          animating: step < 1
+        }
+      });
+    }
   }
 
   render() {
