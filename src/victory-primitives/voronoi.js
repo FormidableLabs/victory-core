@@ -1,9 +1,13 @@
 /*eslint no-magic-numbers: ["error", { "ignore": [2] }]*/
 import React from "react";
 import PropTypes from "prop-types";
+import Twister from "mersenne-twister";
 import Helpers from "../victory-util/helpers";
 import Collection from "../victory-util/collection";
 import CommonProps from "./common-props";
+
+const seed = 2345;
+const generator = new Twister(seed);
 
 export default class Voronoi extends React.Component {
   static propTypes = {
@@ -70,7 +74,7 @@ export default class Voronoi extends React.Component {
 
   // Overridden in victory-core-native
   renderPoint(paths, style, events) {
-    const clipId = paths.circle && `clipPath-${Math.random()}`;
+    const clipId = paths.circle && `clipPath-${generator.random()}`;
     const clipPath = paths.circle ? `url(#${clipId})` : undefined;
     const { role, shapeRendering, className } = this.props;
     const voronoiPath = (
