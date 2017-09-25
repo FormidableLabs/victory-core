@@ -1,8 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Twister from "mersenne-twister";
 import CustomPropTypes from "../victory-util/prop-types";
 import { assign, defaults, isFunction } from "lodash";
 import ClipPath from "../victory-primitives/clip-path";
+
+const seed = 1234;
+const generator = new Twister(seed);
 
 export default class VictoryClipContainer extends React.Component {
   static displayName = "VictoryClipContainer";
@@ -39,7 +43,7 @@ export default class VictoryClipContainer extends React.Component {
     super(props);
     this.clipId = props.clipId !== undefined ?
       props.clipId :
-      Math.round(Math.random() * 10000); // eslint-disable-line no-magic-numbers
+      Math.round(generator.random() * 10000); // eslint-disable-line no-magic-numbers
   }
 
   // Overridden in victory-core-native
