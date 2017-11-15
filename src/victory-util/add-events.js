@@ -185,7 +185,7 @@ export default (WrappedComponent, options) => {
         return React.cloneElement(dataComponent, dataProps);
       });
 
-      if(labelComponents !== null) {
+      if(labelComponent !== null) {
         const labelComponents = this.dataKeys.map((_dataKey, index) => {
           const labelProps = this.getComponentProps(labelComponent, "labels", index);
           if (typeof labelProps.text !== "undefined" && labelProps.text !== null) {
@@ -196,10 +196,10 @@ export default (WrappedComponent, options) => {
 
         const children = [...dataComponents, ...labelComponents];
         return this.renderContainer(groupComponent, children);
-		  } else {
+      } else {
         const children = [...dataComponents];
         return this.renderContainer(groupComponent, children);
-			}
+      }
     }
   };
 };
