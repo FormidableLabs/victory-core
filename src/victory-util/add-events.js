@@ -185,7 +185,7 @@ export default (WrappedComponent, options) => {
         return React.cloneElement(dataComponent, dataProps);
       });
 
-      if(labelComponent !== null) {
+      if (labelComponent !== null) {
         const labelComponents = this.dataKeys.map((_dataKey, index) => {
           const labelProps = this.getComponentProps(labelComponent, "labels", index);
           if (typeof labelProps.text !== "undefined" && labelProps.text !== null) {
