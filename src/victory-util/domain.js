@@ -1,7 +1,7 @@
 import { flatten, includes, isPlainObject, sortedUniq } from "lodash";
 import Data from "./data";
 import Scale from "./scale";
-import Helpers from "./helpers";
+import { getCurrentAxis, stringTicks, isVertical, getRange } from "./helpers";
 import Collection from "./collection";
 
 export default {
@@ -67,7 +67,7 @@ export default {
     }
     const { horizontal } = props;
     const ensureZero = (domain, dataset) => {
-      const currentAxis = Helpers.getCurrentAxis(axis, horizontal);
+      const currentAxis = getCurrentAxis(axis, horizontal);
       if (currentAxis === "x") {
         return domain;
       } else if (!dataset) {
@@ -114,7 +114,7 @@ export default {
    * @returns {Array} the domain based on data
    */
   getDomainFromData(props, axis, dataset) {
-    const currentAxis = Helpers.getCurrentAxis(axis, props.horizontal);
+    const currentAxis = getCurrentAxis(axis, props.horizontal);
     const flatData = flatten(dataset);
     const allData = flatData.map((datum) => {
       return typeof datum[`_${currentAxis}1`] === "undefined" ?
@@ -165,7 +165,7 @@ export default {
    */
   getDomainFromTickValues(props, axis) {
     let domain;
-    if (Helpers.stringTicks(props)) {
+    if (stringTicks(props)) {
       domain = [1, props.tickValues.length];
     } else {
       // coerce ticks to numbers
@@ -174,7 +174,7 @@ export default {
       domain = props.polar && axis === "x" ?
         this.getSymmetricDomain(initialDomain, ticks) : initialDomain;
     }
-    if (Helpers.isVertical(props)) {
+    if (isVertical(props)) {
       domain.reverse();
     }
     return domain;
@@ -251,7 +251,7 @@ export default {
    * @returns {Array} an array of data arrays grouped by index or category
    */
   getCumulativeData(props, axis, datasets) {
-    const currentAxis = Helpers.getCurrentAxis(axis, props.horizontal);
+    const currentAxis = getCurrentAxis(axis, props.horizontal);
     const otherAxis = currentAxis === "x" ? "y" : "x";
     const categories = [];
     const axisValues = [];
@@ -316,7 +316,7 @@ export default {
 
     const domainMin = Collection.getMinValue(domain);
     const domainMax = Collection.getMaxValue(domain);
-    const range = Helpers.getRange(props, axis);
+    const range = getRange(props, axis);
     const rangeExtent = Math.abs(Math.max(...range) - Math.min(...range));
 
     // Naive initial padding calculation

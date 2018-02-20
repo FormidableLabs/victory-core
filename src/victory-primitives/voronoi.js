@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { isObject, uniqueId } from "lodash";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle, evaluateProp } from "../victory-util/helpers";
 import CommonProps from "./common-props";
 import ClipPath from "../victory-primitives/clip-path";
 import Path from "../victory-primitives/path";
@@ -49,8 +49,8 @@ export default class Voronoi extends React.Component {
       pathComponent, clipPathComponent, groupComponent, circleComponent
     } = this.props;
     const voronoiPath = this.getVoronoiPath(this.props);
-    const style = Helpers.evaluateStyle(this.props.style, datum, active);
-    const size = Helpers.evaluateProp(this.props.size, datum, active);
+    const style = evaluateStyle(this.props.style, datum, active);
+    const size = evaluateProp(this.props.size, datum, active);
 
     if (size) {
       const circle = React.cloneElement(circleComponent, {

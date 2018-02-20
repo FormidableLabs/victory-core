@@ -1,5 +1,5 @@
 import { includes, isFunction } from "lodash";
-import Helpers from "./helpers";
+import { createAccessor } from "./helpers";
 import Collection from "./collection";
 import * as d3Scale from "d3-scale";
 
@@ -72,7 +72,7 @@ export default {
     if (!props.data) {
       return "linear";
     }
-    const accessor = Helpers.createAccessor(props[axis]);
+    const accessor = createAccessor(props[axis]);
     const axisData = props.data.map(accessor);
     return Collection.containsDates(axisData) ? "time" : "linear";
   },

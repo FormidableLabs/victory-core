@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import CommonProps from "./common-props";
 import Path from "./path";
 import { isFunction } from "lodash";
@@ -26,7 +26,7 @@ export default class Slice extends React.Component {
     return React.cloneElement(pathComponent, {
       className, role, shapeRendering, events,
       transform: origin ? `translate(${origin.x}, ${origin.y})` : undefined,
-      style: Helpers.evaluateStyle(style, datum, active),
+      style: evaluateStyle(style, datum, active),
       d: isFunction(pathFunction) ? pathFunction(slice) : undefined
     });
   }

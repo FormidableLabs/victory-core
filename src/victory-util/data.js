@@ -1,5 +1,5 @@
 import { assign, uniq, range, last, isFunction, property, sortBy } from "lodash";
-import Helpers from "./helpers";
+import { createAccessor } from "./helpers";
 import Collection from "./collection";
 import Scale from "./scale";
 import Immutable from "./immutable";
@@ -81,9 +81,9 @@ export default {
     };
 
     const accessor = {
-      x: Helpers.createAccessor(props.x !== undefined ? props.x : "x"),
-      y: Helpers.createAccessor(props.y !== undefined ? props.y : "y"),
-      y0: Helpers.createAccessor(props.y0 !== undefined ? props.y0 : "y0")
+      x: createAccessor(props.x !== undefined ? props.x : "x"),
+      y: createAccessor(props.y !== undefined ? props.y : "y"),
+      y0: createAccessor(props.y0 !== undefined ? props.y0 : "y0")
     };
 
     const data = dataset.reduce((dataArr, datum, index) => { // eslint-disable-line complexity
@@ -220,7 +220,7 @@ export default {
     }
 
     const key = typeof props[axis] === "undefined" ? axis : props[axis];
-    const accessor = Helpers.createAccessor(key);
+    const accessor = createAccessor(key);
 
     const dataStrings = props.data.reduce((dataArr, datum) => {
       datum = this.parseDatum(datum);

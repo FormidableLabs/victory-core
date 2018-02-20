@@ -1,7 +1,7 @@
 /*eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1, 2] }]*/
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import CommonProps from "./common-props";
 import Path from "./path";
 
@@ -85,7 +85,7 @@ export default class Flyout extends React.Component {
 
   render() {
     const { datum, active, role, shapeRendering, className, events, pathComponent } = this.props;
-    const style = Helpers.evaluateStyle(this.props.style, datum, active);
+    const style = evaluateStyle(this.props.style, datum, active);
     const path = this.getFlyoutPath(this.props);
     return React.cloneElement(
       pathComponent, { style, className, shapeRendering, role, events, d: path }

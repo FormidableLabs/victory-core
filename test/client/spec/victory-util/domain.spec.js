@@ -2,7 +2,7 @@
 /* eslint max-nested-callbacks: 0 */
 /* global sinon */
 
-import { Data, Domain, Helpers } from "src/index";
+import { Data, Domain } from "src/index";
 
 describe("helpers/domain", () => {
   describe("padDomain", () => {
@@ -92,38 +92,22 @@ describe("helpers/domain", () => {
   });
 
   describe("getDomainFromTickValues", () => {
-    let sandbox;
-    beforeEach(() => {
-      sandbox = sinon.sandbox.create();
-      sandbox.spy(Helpers, "isVertical");
-      sandbox.spy(Helpers, "stringTicks");
-    });
-
-    afterEach(() => {
-      sandbox.restore();
-    });
 
     it("determines a domain from tickValues", () => {
       const props = { tickValues: [1, 2, 3] };
       const domainResult = Domain.getDomainFromTickValues(props);
-      expect(Helpers.stringTicks).calledWith(props).and.returned(false);
-      expect(Helpers.isVertical).calledWith(props).and.returned(false);
       expect(domainResult).to.eql([1, 3]);
     });
 
     it("determines a domain from string tick values", () => {
       const props = { tickValues: ["a", "b", "c", "d"] };
       const domainResult = Domain.getDomainFromTickValues(props);
-      expect(Helpers.stringTicks).calledWith(props).and.returned(true);
-      expect(Helpers.isVertical).calledWith(props).and.returned(false);
       expect(domainResult).to.eql([1, 4]);
     });
 
     it("reverses a domain from tickValues when the axis is vertical", () => {
       const props = { tickValues: [1, 2, 3], dependentAxis: true };
       const domainResult = Domain.getDomainFromTickValues(props);
-      expect(Helpers.stringTicks).calledWith(props).and.returned(false);
-      expect(Helpers.isVertical).calledWith(props).and.returned(true);
       expect(domainResult).to.eql([3, 1]);
     });
   });
