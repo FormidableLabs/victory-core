@@ -1,4 +1,10 @@
-import { evaluateProp, scalePoint, degreesToRadians, radiansToDegrees, getPoint } from "./helpers";
+import {
+  evaluateProp,
+  scalePoint,
+  degreesToRadians,
+  radiansToDegrees,
+  getPoint
+} from "./helpers";
 
 const getText = (props, datum, index) => {
   if (datum.label !== undefined) {

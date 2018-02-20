@@ -1,7 +1,13 @@
 /* eslint no-unused-expressions: 0 */
-import { evaluateProp, evaluateStyle,
-         getRange, getStyles, getPadding,
-         createAccessor, isVertical } from "src/victory-util/helpers";
+import {
+  evaluateProp,
+  evaluateStyle,
+  getRange,
+  getStyles,
+  getPadding,
+  createAccessor,
+  isVertical
+} from "src/victory-util/helpers";
 
 describe("helpers", () => {
   describe("evaluateProp", () => {
