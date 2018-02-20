@@ -1,7 +1,7 @@
 /*eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1, 2] }]*/
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import { defined, getXAccessor, getYAccessor, getY0Accessor, getAngleAccessor } from "./helpers";
 import { assign } from "lodash";
 import * as d3Shape from "d3-shape";
@@ -66,7 +66,7 @@ export default class Area extends React.Component {
       role, shapeRendering, className, polar, origin, data, active, pathComponent, events,
       groupComponent
     } = this.props;
-    const style = Helpers.evaluateStyle(assign({ fill: "black" }, this.props.style), data, active);
+    const style = evaluateStyle(assign({ fill: "black" }, this.props.style), data, active);
     const transform = polar && origin ? `translate(${origin.x}, ${origin.y})` : undefined;
 
     const renderLine = style.stroke && style.stroke !== "none" && style.stroke !== "transparent";

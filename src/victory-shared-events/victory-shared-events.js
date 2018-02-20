@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import CustomPropTypes from "../victory-util/prop-types";
 import Events from "../victory-util/events";
-import Helpers from "../victory-util/helpers";
+import { reduceChildren } from "../victory-util/helpers";
 import Timer from "../victory-util/timer";
 
 export default class VictorySharedEvents extends React.Component {
@@ -147,7 +147,7 @@ export default class VictorySharedEvents extends React.Component {
       }
     };
 
-    const baseProps = Helpers.reduceChildren(childComponents, iteratee);
+    const baseProps = reduceChildren(childComponents, iteratee);
     return fromPairs(baseProps);
   }
 

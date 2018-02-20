@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import { assign } from "lodash";
 import CommonProps from "./common-props";
 import Line from "./line";
@@ -35,7 +35,7 @@ export default class ErrorBar extends React.Component {
 
   getStyle(props) {
     const { style, datum, active } = props;
-    return Helpers.evaluateStyle(assign({ stroke: "black" }, style), datum, active);
+    return evaluateStyle(assign({ stroke: "black" }, style), datum, active);
   }
 
   renderBorder(props, error, type) {

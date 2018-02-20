@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CustomPropTypes from "../victory-util/prop-types";
-import Helpers from "../victory-util/helpers";
+import { getPadding, getRadius } from "../victory-util/helpers";
 import { assign, defaults, isFunction, isObject, uniqueId } from "lodash";
 import ClipPath from "../victory-primitives/clip-path";
 import Circle from "../victory-primitives/circle";
@@ -53,8 +53,8 @@ export default class VictoryClipContainer extends React.Component {
     const {
       polar, origin, clipWidth = 0, clipHeight = 0, translateX = 0, translateY = 0
     } = props;
-    const clipPadding = Helpers.getPadding({ padding: props.clipPadding });
-    const radius = props.radius || Helpers.getRadius(props);
+    const clipPadding = getPadding({ padding: props.clipPadding });
+    const radius = props.radius || getRadius(props);
     return {
       x: (polar ? origin.x : translateX) - clipPadding.left,
       y: (polar ? origin.y : translateY) - clipPadding.top,
@@ -88,10 +88,10 @@ export default class VictoryClipContainer extends React.Component {
       polar, origin, clipWidth = 0, clipHeight = 0, translateX = 0, translateY = 0,
       circleComponent, rectComponent, clipPathComponent
     } = props;
-    const { top, bottom, left, right } = Helpers.getPadding({ padding: props.clipPadding });
+    const { top, bottom, left, right } = getPadding({ padding: props.clipPadding });
     let child;
     if (polar) {
-      const radius = props.radius || Helpers.getRadius(props);
+      const radius = props.radius || getRadius(props);
       const circleProps = {
         r: Math.max((radius + left + right), (radius + top + bottom), 0),
         cx: origin.x - left,

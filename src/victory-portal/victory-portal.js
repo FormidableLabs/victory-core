@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Log from "../victory-util/log";
+import { warn } from "../victory-util/log";
 import { defaults, omit } from "lodash";
 
 export default class VictoryPortal extends React.Component {
@@ -28,7 +28,7 @@ export default class VictoryPortal extends React.Component {
       if (typeof this.context.portalUpdate !== "function") {
         const msg = "`renderInPortal` is not supported outside of `VictoryContainer`. " +
           "Component will be rendered in place";
-        Log.warn(msg);
+        warn(msg);
         this.renderInPlace = true;
       }
       this.checkedContext = true;
@@ -71,4 +71,3 @@ export default class VictoryPortal extends React.Component {
     return this.renderPortal(child);
   }
 }
-

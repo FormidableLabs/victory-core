@@ -1,6 +1,6 @@
 /*eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1, 2] }]*/
 import { isFunction, find } from "lodash";
-import Log from "./log";
+import { warn } from "./log";
 import PropTypes from "prop-types";
 
 /**
@@ -76,7 +76,7 @@ export default {
     return (props, propName, componentName) => {
       const value = props[propName];
       if (value !== null && value !== undefined) {
-        Log.warn(
+        warn(
           `"${propName}" property of "${componentName}" has been deprecated ${explanation}`
         );
       }

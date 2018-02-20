@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import { assign } from "lodash";
 import CommonProps from "./common-props";
 import Line from "./line";
@@ -24,7 +24,7 @@ export default class Axis extends React.Component {
     const {
       x1, x2, y1, y2, events, datum, active, lineComponent, className, role, shapeRendering
     } = this.props;
-    const style = Helpers.evaluateStyle(
+    const style = evaluateStyle(
       assign({ stroke: "black" }, this.props.style), datum, active
     );
     return React.cloneElement(lineComponent, {

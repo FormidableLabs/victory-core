@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { partialRight } from "lodash";
-import LegendHelpers from "./helper-methods";
+import { getBaseProps, getDimensions } from "./helper-methods";
 import CustomPropTypes from "../victory-util/prop-types";
 import addEvents from "../victory-util/add-events";
-import Helpers from "../victory-util/helpers";
+import { modifyProps } from "../victory-util/helpers";
 import VictoryLabel from "../victory-label/victory-label";
 import VictoryContainer from "../victory-container/victory-container";
 import VictoryTheme from "../victory-theme/victory-theme";
@@ -150,9 +150,9 @@ class VictoryLegend extends React.Component {
     titleComponent: <VictoryLabel/>
   };
 
-  static getBaseProps = partialRight(LegendHelpers.getBaseProps.bind(LegendHelpers), fallbackProps);
+  static getBaseProps = partialRight(getBaseProps.bind(getBaseProps), fallbackProps);
   static getDimensions = partialRight(
-    LegendHelpers.getDimensions.bind(LegendHelpers), fallbackProps
+    getDimensions.bind(getDimensions), fallbackProps
   );
   static expectedComponents = [
     "borderComponent", "containerComponent", "dataComponent",
@@ -186,7 +186,7 @@ class VictoryLegend extends React.Component {
 
   render() {
     const { role } = this.constructor;
-    const props = Helpers.modifyProps((this.props), fallbackProps, role);
+    const props = modifyProps((this.props), fallbackProps, role);
     const children = [this.renderChildren(props)];
     return props.standalone ?
       this.renderContainer(props.containerComponent, children) :

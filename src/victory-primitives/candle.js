@@ -1,7 +1,7 @@
 /*eslint no-magic-numbers: ["error", { "ignore": [0.5, 2] }]*/
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import { assign, defaults } from "lodash";
 import CommonProps from "./common-props";
 import Rect from "./rect";
@@ -40,7 +40,7 @@ export default class Candle extends React.Component {
       x, high, low, open, close, data, datum, active, width, candleHeight, events, groupComponent,
       rectComponent, lineComponent, role, shapeRendering, className, wickStrokeWidth
     } = this.props;
-    const style = Helpers.evaluateStyle(
+    const style = evaluateStyle(
       assign({ stroke: "black" }, this.props.style), datum, active
     );
     const wickStyle = defaults({ strokeWidth: wickStrokeWidth }, style);

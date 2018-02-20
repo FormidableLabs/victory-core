@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import { assign } from "lodash";
 import CommonProps from "./common-props";
 import Path from "./path";
@@ -203,7 +203,7 @@ export default class Bar extends React.Component {
     } = this.props;
     const stroke = this.props.style && this.props.style.fill || "black";
     const baseStyle = { fill: "black", stroke };
-    const style = Helpers.evaluateStyle(assign(baseStyle, this.props.style), datum, active);
+    const style = evaluateStyle(assign(baseStyle, this.props.style), datum, active);
     const width = this.getBarWidth(this.props, style);
     const path = polar ?
       this.getPolarBarPath(this.props, width) : this.getBarPath(this.props, width);

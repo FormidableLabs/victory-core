@@ -1,7 +1,7 @@
 /*eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1, 2] }]*/
 import React from "react";
 import PropTypes from "prop-types";
-import Helpers from "../victory-util/helpers";
+import { evaluateStyle } from "../victory-util/helpers";
 import { defined, getXAccessor, getYAccessor, getAngleAccessor } from "./helpers";
 import { assign } from "lodash";
 import * as d3Shape from "d3-shape";
@@ -51,7 +51,7 @@ export default class Curve extends React.Component {
     const {
       data, active, events, role, shapeRendering, className, polar, origin, pathComponent
     } = this.props;
-    const style = Helpers.evaluateStyle(
+    const style = evaluateStyle(
       assign({ fill: "none", stroke: "black" }, this.props.style), data, active
     );
     const lineFunction = this.getLineFunction(this.props);
