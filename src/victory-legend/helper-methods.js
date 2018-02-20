@@ -3,12 +3,12 @@ import { evaluateStyle, formatPadding, modifyProps } from "../victory-util/helpe
 import Style from "../victory-util/style";
 import TextSize from "../victory-util/textsize";
 
-export const getColorScale = (props) => {
+const getColorScale = (props) => {
   const { colorScale } = props;
   return typeof colorScale === "string" ? Style.getColorScale(colorScale) : colorScale || [];
 };
 
-export const getLabelStyles = (props) => {
+const getLabelStyles = (props) => {
   const { data, style } = props;
   return data.map((datum) => {
     const baseLabelStyles = defaults({}, datum.labels, style.labels);
@@ -16,7 +16,7 @@ export const getLabelStyles = (props) => {
   });
 };
 
-export const getStyles = (props, styleObject) => {
+const getStyles = (props, styleObject) => {
   const style = props.style || {};
   styleObject = styleObject || {};
   const parentStyleProps = { height: "100%", width: "100%" };
@@ -29,7 +29,7 @@ export const getStyles = (props, styleObject) => {
   };
 };
 
-export const getCalculatedValues = (props) => {
+const getCalculatedValues = (props) => {
   const { orientation, theme } = props;
   const defaultStyles = theme && theme.legend && theme.legend.style ? theme.legend.style : {};
   const style = getStyles(props, defaultStyles);
@@ -39,7 +39,7 @@ export const getCalculatedValues = (props) => {
   return assign({}, props, { style, isHorizontal, colorScale, borderPadding });
 };
 
-export const getColumn = (props, index) => {
+const getColumn = (props, index) => {
   const { itemsPerRow, isHorizontal } = props;
   if (!itemsPerRow) {
     return isHorizontal ? index : 0;
@@ -47,7 +47,7 @@ export const getColumn = (props, index) => {
   return isHorizontal ? index % itemsPerRow : Math.floor(index / itemsPerRow);
 };
 
-export const getRow = (props, index) => {
+const getRow = (props, index) => {
   const { itemsPerRow, isHorizontal } = props;
   if (!itemsPerRow) {
     return isHorizontal ? 0 : index;
@@ -55,7 +55,7 @@ export const getRow = (props, index) => {
   return isHorizontal ? Math.floor(index / itemsPerRow) : index % itemsPerRow;
 };
 
-export const groupData = (props) => {
+const groupData = (props) => {
   const { data } = props;
   const style = props.style && props.style.data || {};
   const labelStyles = getLabelStyles(props);
@@ -74,7 +74,7 @@ export const groupData = (props) => {
   });
 };
 
-export const getColumnWidths = (props, data) => {
+const getColumnWidths = (props, data) => {
   const gutter = props.gutter || {};
   const gutterWidth = typeof gutter === "object" ?
     (gutter.left || 0) + (gutter.right || 0) :
@@ -90,7 +90,7 @@ export const getColumnWidths = (props, data) => {
   }, []);
 };
 
-export const getRowHeights = (props, data) => {
+const getRowHeights = (props, data) => {
   const gutter = props.rowGutter || {};
   const gutterHeight = typeof gutter === "object" ?
     (gutter.top || 0) + (gutter.bottom || 0) :
@@ -106,14 +106,14 @@ export const getRowHeights = (props, data) => {
   }, []);
 };
 
-export const getTitleDimensions = (props) => {
+const getTitleDimensions = (props) => {
   const style = props.style && props.style.title || {};
   const textSize = TextSize.approximateTextSize(props.title, style);
   const padding = style.padding || 0;
   return { height: textSize.height + 2 * padding || 0, width: textSize.width + 2 * padding || 0 };
 };
 
-export const getOffset = (datum, rowHeights, columnWidths) => {
+const getOffset = (datum, rowHeights, columnWidths) => {
   const { column, row } = datum;
   return {
     x: range(column).reduce((memo, curr) => {
@@ -127,7 +127,7 @@ export const getOffset = (datum, rowHeights, columnWidths) => {
   };
 };
 
-export const getAnchors = (titleOrientation, centerTitle) => {
+const getAnchors = (titleOrientation, centerTitle) => {
   const standardAnchors = {
     textAnchor: titleOrientation === "right" ? "end" : "start",
     verticalAnchor: titleOrientation === "bottom" ? "end" : "start"
@@ -143,7 +143,7 @@ export const getAnchors = (titleOrientation, centerTitle) => {
   }
 };
 
-export const getTitleStyle = (props) => {
+const getTitleStyle = (props) => {
   const { titleOrientation, centerTitle, titleComponent } = props;
   const baseStyle = props.style && props.style.title || {};
   const componentStyle = titleComponent.props && titleComponent.props.style || {};
@@ -154,7 +154,7 @@ export const getTitleStyle = (props) => {
 };
 
   // eslint-disable-next-line complexity
-export const getTitleProps = (props, borderProps) => {
+const getTitleProps = (props, borderProps) => {
   const { title, titleOrientation, centerTitle, borderPadding } = props;
   const { height, width } = borderProps;
   const style = getTitleStyle(props);
@@ -180,14 +180,14 @@ export const getTitleProps = (props, borderProps) => {
   };
 };
 
-export const getBorderProps = (props, contentHeight, contentWidth) => {
+const getBorderProps = (props, contentHeight, contentWidth) => {
   const { x, y, borderPadding, style } = props;
   const height = contentHeight + borderPadding.top + borderPadding.bottom;
   const width = contentWidth + borderPadding.left + borderPadding.right;
   return { x, y, height, width, style: assign({ fill: "none" }, style.border) };
 };
 
-export const getDimensions = (props, fallbackProps) => {
+const getDimensions = (props, fallbackProps) => {
   const modifiedProps = modifyProps(props, fallbackProps, "legend");
   props = assign({}, modifiedProps, getCalculatedValues(modifiedProps));
   const { title, titleOrientation } = props;
@@ -206,7 +206,7 @@ export const getDimensions = (props, fallbackProps) => {
   };
 };
 
-export const getBaseProps = (props, fallbackProps) => {
+const getBaseProps = (props, fallbackProps) => {
   const modifiedProps = modifyProps(props, fallbackProps, "legend");
   props = assign({}, modifiedProps, getCalculatedValues(modifiedProps));
   const {
@@ -269,4 +269,24 @@ export const getBaseProps = (props, fallbackProps) => {
 
     return childProps;
   }, initialProps);
+};
+
+export {
+  getColorScale,
+  getLabelStyles,
+  getStyles,
+  getCalculatedValues,
+  getColumn,
+  getRow,
+  groupData,
+  getColumnWidths,
+  getRowHeights,
+  getTitleDimensions,
+  getOffset,
+  getAnchors,
+  getTitleStyle,
+  getTitleProps,
+  getBorderProps,
+  getDimensions,
+  getBaseProps
 };

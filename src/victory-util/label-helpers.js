@@ -1,13 +1,13 @@
 import { evaluateProp, scalePoint, degreesToRadians, radiansToDegrees, getPoint } from "./helpers";
 
-export const getText = (props, datum, index) => {
+const getText = (props, datum, index) => {
   if (datum.label !== undefined) {
     return datum.label;
   }
   return Array.isArray(props.labels) ? props.labels[index] : props.labels;
 };
 
-export const getVerticalAnchor = (props, datum) => {
+const getVerticalAnchor = (props, datum) => {
   const sign = datum._y >= 0 ? 1 : -1;
   const labelStyle = props.style && props.style.labels || {};
   if (datum.getVerticalAnchor || labelStyle.verticalAnchor) {
@@ -19,7 +19,7 @@ export const getVerticalAnchor = (props, datum) => {
   }
 };
 
-export const getTextAnchor = (props, datum) => {
+const getTextAnchor = (props, datum) => {
   const { style, horizontal } = props;
   const sign = datum._y >= 0 ? 1 : -1;
   const labelStyle = style && style.labels || {};
@@ -32,12 +32,12 @@ export const getTextAnchor = (props, datum) => {
   }
 };
 
-export const getAngle = (props, datum) => {
+const getAngle = (props, datum) => {
   const labelStyle = props.style && props.style.labels || {};
   return datum.angle || labelStyle.angle;
 };
 
-export const getPadding = (props, datum) => {
+const getPadding = (props, datum) => {
   const { horizontal, style, active } = props;
   const labelStyle = style.labels || {};
   const defaultPadding = evaluateProp(labelStyle.padding, datum, active) || 0;
@@ -48,12 +48,12 @@ export const getPadding = (props, datum) => {
   };
 };
 
-export const getDegrees = (props, datum) => {
+const getDegrees = (props, datum) => {
   const { x } = getPoint(datum);
   return radiansToDegrees(props.scale.x(x));
 };
 
-export const getPolarPadding = (props, datum) => {
+const getPolarPadding = (props, datum) => {
   const { active, style } = props;
   const degrees = getDegrees(props, datum);
   const labelStyle = style.labels || {};
@@ -64,7 +64,7 @@ export const getPolarPadding = (props, datum) => {
   };
 };
 
-export const getPosition = (props, datum) => {
+const getPosition = (props, datum) => {
   const { horizontal, polar } = props;
   const { x, y } = scalePoint(props, datum);
   const padding = getPadding(props, datum);
@@ -82,7 +82,7 @@ export const getPosition = (props, datum) => {
   }
 };
 
-export const getLabelPlacement = (props) => {
+const getLabelPlacement = (props) => {
   const { labelComponent, labelPlacement, polar } = props;
   const defaultLabelPlacement = polar ? "perpendicular" : "vertical";
   return labelPlacement ?
@@ -90,7 +90,7 @@ export const getLabelPlacement = (props) => {
     labelComponent.props && labelComponent.props.labelPlacement || defaultLabelPlacement;
 };
 
-export const getPolarOrientation = (degrees) => {
+const getPolarOrientation = (degrees) => {
   if (degrees < 45 || degrees > 315) { // eslint-disable-line no-magic-numbers
     return "right";
   } else if (degrees >= 45 && degrees <= 135) { // eslint-disable-line no-magic-numbers
@@ -102,7 +102,7 @@ export const getPolarOrientation = (degrees) => {
   }
 };
 
-export const getPolarTextAnchor = (props, degrees) => {
+const getPolarTextAnchor = (props, degrees) => {
   const labelPlacement = getLabelPlacement(props);
   if (
     labelPlacement === "perpendicular" ||
@@ -113,7 +113,7 @@ export const getPolarTextAnchor = (props, degrees) => {
   return degrees <= 90 || degrees > 270 ? "start" : "end";
 };
 
-export const getPolarVerticalAnchor = (props, degrees) => {
+const getPolarVerticalAnchor = (props, degrees) => {
   const labelPlacement = getLabelPlacement(props);
   const orientation = getPolarOrientation(degrees);
   if (labelPlacement === "parallel" || orientation === "left" || orientation === "right") {
@@ -122,7 +122,7 @@ export const getPolarVerticalAnchor = (props, degrees) => {
   return orientation === "top" ? "end" : "start";
 };
 
-export const getPolarAngle = (props, baseAngle) => {
+const getPolarAngle = (props, baseAngle) => {
   const { labelPlacement, datum } = props;
   if (!labelPlacement || labelPlacement === "vertical") {
     return 0;
@@ -141,7 +141,7 @@ export const getPolarAngle = (props, baseAngle) => {
   return angle + sign * labelRotation;
 };
 
-export const getProps = (props, index) => {
+const getProps = (props, index) => {
   const { scale, data, style, horizontal, polar } = props;
   const datum = data[index];
   const degrees = getDegrees(props, datum);
@@ -157,4 +157,21 @@ export const getProps = (props, index) => {
     angle, data, datum, horizontal, index, polar, scale, labelPlacement,
     text, textAnchor, verticalAnchor, x, y, style: style.labels
   };
+};
+
+export {
+  getText,
+  getVerticalAnchor,
+  getTextAnchor,
+  getAngle,
+  getPadding,
+  getDegrees,
+  getPolarPadding,
+  getPosition,
+  getLabelPlacement,
+  getPolarOrientation,
+  getPolarTextAnchor,
+  getPolarVerticalAnchor,
+  getPolarAngle,
+  getProps
 };

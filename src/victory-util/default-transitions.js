@@ -1,6 +1,6 @@
 /* eslint-disable func-style */
 
-export const continuousTransitions = () => {
+const continuousTransitions = () => {
   return {
     onLoad: {
       duration: 2000
@@ -14,7 +14,7 @@ export const continuousTransitions = () => {
   };
 };
 
-export const continuousPolarTransitions = () => {
+const continuousPolarTransitions = () => {
   return {
     onLoad: {
       duration: 2000,
@@ -45,7 +45,7 @@ export const continuousPolarTransitions = () => {
   };
 };
 
-export const discreteTransitions = () => {
+const discreteTransitions = () => {
   return {
     onLoad: {
       duration: 2000,
@@ -62,4 +62,10 @@ export const discreteTransitions = () => {
       after: (datum) => datum
     }
   };
+};
+
+export {
+  continuousTransitions,
+  continuousPolarTransitions,
+  discreteTransitions
 };
