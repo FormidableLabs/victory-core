@@ -1,27 +1,27 @@
 /* eslint no-unused-expressions: 0 */
-import Helpers from "src/victory-util/helpers";
+import Helpers, { omit } from "src/victory-util/helpers";
 
 describe("helpers", () => {
   describe("omit", () => {
     const data = { x: 3, y: 2, z: 1 };
     it("removes omitted keys and preserves all others", () => {
-      const newData = Helpers.omit(data, ["x"]);
+      const newData = omit(data, ["x"]);
       expect(newData.x).to.be.undefined;
       expect(newData.y).to.equal(2);
       expect(newData.z).to.equal(1);
     });
     it("creates a copy of the original object", () => {
-      const newData = Helpers.omit(data, []);
+      const newData = omit(data, []);
       newData.x = 10;
       expect(data.x).to.equal(3);
       expect(newData.x).to.equal(10);
     });
     it("defaults to an empty object", () => {
-      const newData = Helpers.omit();
+      const newData = omit();
       expect(newData).to.eql({});
     });
     it("defaults to simple shallow copy", () => {
-      const newData = Helpers.omit(data);
+      const newData = omit(data);
       expect(newData).to.eql(data);
     });
   });

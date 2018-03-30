@@ -2,29 +2,29 @@ import React from "react";
 import { defaults, isFunction, property, reduce } from "lodash";
 import Collection from "./collection";
 
-export default {
-  /**
-   * creates an object with some keys excluded
-   * replacement for lodash.omit for performance. does not mimick the entire lodash.omit api
-   * @param {Object} originalObject: created object will be based on this object
-   * @param {Array<String>} keys: an array of keys to omit from the new object
-   * @returns {Object} new object with same properties as originalObject
-   */
-  omit(originalObject, keys = []) {
-    // code based on babel's _objectWithoutProperties
-    const newObject = {};
-    for (const key in originalObject) {
-      if (keys.indexOf(key) >= 0) {
-        continue;
-      }
-      if (!Object.prototype.hasOwnProperty.call(originalObject, key)) {
-        continue;
-      }
-      newObject[key] = originalObject[key];
+/**
+ * creates an object with some keys excluded
+ * replacement for lodash.omit for performance. does not mimick the entire lodash.omit api
+ * @param {Object} originalObject: created object will be based on this object
+ * @param {Array<String>} keys: an array of keys to omit from the new object
+ * @returns {Object} new object with same properties as originalObject
+ */
+export const omit = (originalObject, keys = []) => {
+  // code based on babel's _objectWithoutProperties
+  const newObject = {};
+  for (const key in originalObject) {
+    if (keys.indexOf(key) >= 0) {
+      continue;
     }
-    return newObject;
-  },
+    if (!Object.prototype.hasOwnProperty.call(originalObject, key)) {
+      continue;
+    }
+    newObject[key] = originalObject[key];
+  }
+  return newObject;
+};
 
+export default {
   getPoint(datum) {
     const exists = (val) => val !== undefined;
     const { _x, _x1, _x0, _voronoiX, _y, _y1, _y0, _voronoiY } = datum;
@@ -170,7 +170,7 @@ export default {
 
   modifyProps(props, fallbackProps, role) {
     const theme = props.theme && props.theme[role] ? props.theme[role] : {};
-    const themeProps = this.omit(theme, ["style"]);
+    const themeProps = omit(theme, ["style"]);
     return defaults({}, props, themeProps, fallbackProps);
   },
 
