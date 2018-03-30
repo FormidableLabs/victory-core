@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CustomPropTypes from "../victory-util/prop-types";
-import { assign, omit, defaults, uniqueId, isObject } from "lodash";
+import { assign, defaults, uniqueId, isObject } from "lodash";
 import Portal from "../victory-portal/portal";
 import Timer from "../victory-util/timer";
+import Helpers from "../victory-util/helpers";
 
 export default class VictoryContainer extends React.Component {
   static displayName = "VictoryContainer";
@@ -132,7 +133,9 @@ export default class VictoryContainer extends React.Component {
 
   render() {
     const { width, height, responsive, events } = this.props;
-    const style = responsive ? this.props.style : omit(this.props.style, ["height", "width"]);
+    const style = responsive
+      ? this.props.style
+      : Helpers.omit(this.props.style, ["height", "width"]);
     const svgProps = assign(
       {
         width, height, role: "img",

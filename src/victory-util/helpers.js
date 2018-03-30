@@ -1,5 +1,5 @@
 import React from "react";
-import { defaults, isFunction, property, omit, reduce } from "lodash";
+import { defaults, isFunction, property, reduce } from "lodash";
 import Collection from "./collection";
 
 export default {
@@ -170,7 +170,7 @@ export default {
 
   modifyProps(props, fallbackProps, role) {
     const theme = props.theme && props.theme[role] ? props.theme[role] : {};
-    const themeProps = omit(theme, ["style"]);
+    const themeProps = this.omit(theme, ["style"]);
     return defaults({}, props, themeProps, fallbackProps);
   },
 
