@@ -25,6 +25,38 @@ describe("helpers", () => {
       expect(newData).to.eql(data);
     });
   });
+
+  describe("modifyProps", () => {
+    it("defaults to an empty object", () => {
+      expect(Helpers.modifyProps({})).to.eql({});
+    });
+    it("removes the theme role's style", () => {
+      const role = "legend";
+      const props = {
+        theme: {
+          legend: {
+            style: {
+              color: "blue"
+            },
+            data: 42
+          }
+        }
+      };
+      const fallbackProps = {};
+      const modifiedProps = {
+        ...props,
+        data: 42
+      };
+      expect(Helpers.modifyProps(props, fallbackProps, role)).to.eql(modifiedProps);
+    });
+    it("uses fallbackProps", () => {
+      const props = { x: 2, y: 3 };
+      const fallbackProps = { x: 12, y: 13, z: 14 };
+      const modifiedProps = { x: 2, y: 3, z: 14 };
+      expect(Helpers.modifyProps(props, fallbackProps)).to.eql(modifiedProps);
+    });
+  });
+
   describe("evaluateProp", () => {
     const data = { x: 3, y: 2 };
     it("evaluates functional props", () => {
