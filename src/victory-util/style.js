@@ -3,6 +3,7 @@ import { pick } from "lodash";
 /**
  * Acceptable CSS/SVG style attributes
  * https://react-cn.github.io/react/docs/tags-and-attributes.html#svg-attributes
+ * "x" and "y" are not on this whitelist, as they are sent by separate props
  */
 const styleWhitelist = [
   "angle", "clipPath", "cx", "cy", "d", "dx", "dy", "fill", "fillOpacity", "fontFamily",
@@ -10,9 +11,9 @@ const styleWhitelist = [
   "markerMid", "markerStart", "offset", "opacity", "patternContentUnits", "patternUnits",
   "points", "preserveAspectRatio", "r", "rx", "ry", "spreadMethod", "stopColor", "stopOpacity",
   "stroke", "strokeDasharray", "strokeLinecap", "strokeOpacity", "strokeWidth", "textAnchor",
-  "transform", "version", "verticalAnchor", "viewBox", "width", "x1", "x2", "x", "xlinkActuate",
+  "transform", "version", "verticalAnchor", "viewBox", "width", "x1", "x2", "xlinkActuate",
   "xlinkArcrole", "xlinkHref", "xlinkRole", "xlinkShow", "xlinkTitle", "xlinkType", "xmlBase",
-  "xmlLang", "xmlSpace", "y1", "y2", "y"
+  "xmlLang", "xmlSpace", "y1", "y2"
 ];
 
 /**
