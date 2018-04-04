@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Collection from "../victory-util/collection";
-import { sanitizeStyle } from "../victory-util/style";
+import { sanitizeSvgStyle } from "../victory-util/style";
 
 export default class Text extends React.Component {
   static propTypes = {
@@ -29,7 +29,7 @@ export default class Text extends React.Component {
     return (
       <text
         className={className} x={x} dx={dx} y={y} dy={dy}
-        transform={transform} style={sanitizeStyle(style)}
+        transform={transform} style={sanitizeSvgStyle(style)}
         {...events}
       >
         {title && <title>{title}</title>}
