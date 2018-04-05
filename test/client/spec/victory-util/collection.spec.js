@@ -184,7 +184,6 @@ describe("collections", () => {
     let sandbox;
     beforeEach(() => {
       sandbox = sinon.sandbox.create();
-      sandbox.spy(Collection, "checkEquality");
     });
     afterEach(() => {
       sandbox.restore();
