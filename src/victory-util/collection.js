@@ -1,4 +1,5 @@
 import { isEqual, keys, isEmpty, isPlainObject } from "lodash";
+import fastDeepEqual from "fast-deep-equal";
 
 export default {
   isNonEmptyArray(collection) {
@@ -106,7 +107,7 @@ export default {
     - Does not handle circular references in objects and arrays
   */
   areVictoryPropsEqual(a, b) {
-    return this.checkEquality(a, b);
+    return fastDeepEqual(a, b);
   },
 
   // Broken into a separate method for ease of unit testing
