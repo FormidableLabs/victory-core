@@ -222,7 +222,7 @@ describe("collections", () => {
 
     it("returns true if values are functions", () => {
       const a = { test: () => "a" };
-      const b = { test: () => "a" };
+      const b = { test: () => "b" };
       expect(Collection.areVictoryPropsEqual(a, b)).to.equal(true);
     });
 
@@ -339,7 +339,6 @@ describe("collections", () => {
         [undefined, undefined, true],
         [undefined, null, false],
         [undefined, "", false],
-        [NaN, NaN, true],
         [NaN, "a", false],
         [NaN, Infinity, false]
       ];
