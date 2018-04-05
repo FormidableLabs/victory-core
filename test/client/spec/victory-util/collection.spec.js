@@ -327,6 +327,16 @@ describe("collections", () => {
       });
     });
 
+    it("does not hang on circular structures", () => {
+      const obj = {};
+      obj.self = obj;
+      const a = { x: obj };
+      const b = { x: obj };
+      const c = { y: obj };
+      expect(Collection.areVictoryPropsEqual(a, b)).to.equal(true);
+      expect(Collection.areVictoryPropsEqual(a, c)).to.equal(false);
+    });
+
     it("correctly distinguishes null, NaN and undefined", () => {
       const pairs = [
         // a, b, shouldAEqualB

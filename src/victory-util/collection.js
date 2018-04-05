@@ -101,7 +101,6 @@ export default {
   `areVictoryPropsEqual` does the following:
     - marks any two Functions as equal
     - returns false when checking the equality of things like `1` vs. `Object(1)`
-    - ignores circular references in objects and arrays and returns false
     (see the tests for more specifics)
   */
   areVictoryPropsEqual(a, b) {
