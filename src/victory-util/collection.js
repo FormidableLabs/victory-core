@@ -1,4 +1,3 @@
-import { isEqual, keys, isEmpty, isPlainObject } from "lodash";
 import fastDeepEqual from "fast-deep-equal";
 
 export default {
@@ -94,7 +93,7 @@ export default {
    */
   allSetsEqual(itemSets) {
     return itemSets.every((comparisonSet) => {
-      return isEqual(comparisonSet[0], comparisonSet[1]);
+      return fastDeepEqual(comparisonSet[0], comparisonSet[1]);
     });
   },
 
