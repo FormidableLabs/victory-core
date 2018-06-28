@@ -1,0 +1,18 @@
+---
+extends:
+  - "formidable/configurations/es6-react"
+
+env:
+  mocha: true
+
+plugins:
+  - mocha
+
+rules:
+  mocha/no-exclusive-tests: 2
+  no-magic-numbers: 0
+  import/no-unresolved: 0 # We have custom `src` webpack prefix that is not node-resolvable
+
+globals:
+  expect: false
+

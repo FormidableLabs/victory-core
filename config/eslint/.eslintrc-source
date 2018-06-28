@@ -1,0 +1,10 @@
+---
+extends:
+  - "formidable/configurations/es6-react"
+  - ".eslintrc-base"
+
+rules:
+  # Don't check victory deps until bugfix for NODE_PATH uptream.
+  # https://github.com/benmosher/eslint-plugin-import/issues/142
+  import/no-unresolved: [2, { ignore: ["^(builder-|)victory"] }]
+  no-magic-numbers: [error, { ignore: [-1, 0, 0.5, 1, 2, 90, 180, 270, 360] }]
